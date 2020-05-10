@@ -192,7 +192,7 @@ Enviarlo y esperar la autorización del enunciado por parte de los docentes. Una
 |Manejo de archivos||
 |Custom exceptions||
 |Log de errores||
-|Envio de emails||
+|Envio de emails|| SI
 
 
 ### 3.3 - Entrega Regularidad
