@@ -162,11 +162,11 @@ Enviarlo y esperar la autorización del enunciado por parte de los docentes. Una
 
 |Requerimiento|cant. mín.<br>1 o 2 integ|cant. máx.<br>3 o 4 integ|Detalle/Listado de casos incluidos|
 |:-|-:|-:|:-|
-|ABMC simple|1 x integ|1 x integ|
-|ABMC dependiente|1|2|
-|CU NO-ABMC|1|2|
-|Listado simple|1|3(*)|
-|Listado complejo|0|1(*)|
+|ABMC simple|1 x integ|1 x integ|4
+|ABMC dependiente|1|2|2
+|CU NO-ABMC|1|2|1
+|Listado simple|1|3(*)|4
+|Listado complejo|0|1(*)|2
 
 (\*) los grupos de 3 y 4 integrantes deben elegir entre 1 listado complejo o 3 simlples para regularizar.
 
@@ -175,10 +175,10 @@ Enviarlo y esperar la autorización del enunciado por parte de los docentes. Una
 
 |Requerimiento|cant. mín.<br>1 o 2 integ|cant. máx.<br>3 o 4 integ|Detalle/Listado de casos incluidos|
 |:-|-:|-:|:-|
-|ABMC|todos|todos|
-|CU "Complejo"(nivel resumen)|1|2|
-|Listado complejo|1|2|
-|Nivel de acceso|2|2|
+|ABMC|todos|todos| todos
+|CU "Complejo"(nivel resumen)|1|2|1
+|Listado complejo|1|2|2
+|Nivel de acceso|2|2|2
 |Manejo de errores|obligatorio|obligatorio|no requiere detalle|
 |requerimiento extra obligatorio (**)|0|1|
 |publicar el sitio|olbigatorio|obligatorio|no requiere detalle|
