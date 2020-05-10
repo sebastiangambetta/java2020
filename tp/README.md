@@ -258,5 +258,4 @@ Luego de la defensa el resultado puede ser:
 * Desarrollo aprobado - Defensa a repetir: se considera el código adecuado y aprobado. Deberá repetirse la defensa en un plazo acordado con el docente.
 * Desarrollo a revisión - Defensa a repetir: se pactará una nueva fecha de entrega y defensa con el docente.
 
-[documentación requerida]
-https://docs.google.com/document/d/1ja8ymMSfaWGs2U7rduySuYLFl1tgHGMPga-xqh6SK4I/edit
+[documentación requerida]https://drive.google.com/open?id=1ja8ymMSfaWGs2U7rduySuYLFl1tgHGMPga-xqh6SK4I
