@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>AlquilerPeliculas</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+   <servlet>
+        <servlet-name>srvGenero</servlet-name>
+        <servlet-class>servlet.srvGenero</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvAlquiler</servlet-name>
+        <servlet-class>servlet.srvAlquiler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvLineaAlquiler</servlet-name>
+        <servlet-class>servlet.srvLineaAlquiler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvLogin</servlet-name>
+        <servlet-class>servlet.srvLogin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvLstUsuarios</servlet-name>
+        <servlet-class>servlet.srvLstUsuarios</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvPelicula</servlet-name>
+        <servlet-class>servlet.srvPelicula</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvSocio</servlet-name>
+        <servlet-class>servlet.srvSocio</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvTarjetaCredito</servlet-name>
+        <servlet-class>servlet.srvTarjetaCredito</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>srvUsuario</servlet-name>
+        <servlet-class>servlet.srvUsuario</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>srvGenero</servlet-name>
+        <url-pattern>/srvGenero</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>srvAlquiler</servlet-name>
+        <url-pattern>/srvAlquiler</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>srvLineaAlquiler</servlet-name>
+        <url-pattern>/srvLineaAlquiler</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>srvLogin</servlet-name>
+        <url-pattern>/srvLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvLstUsuarios</servlet-name>
+        <url-pattern>/srvLstUsuarios</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>srvPelicula</servlet-name>
+        <url-pattern>/srvPelicula</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>srvSocio</servlet-name>
+        <url-pattern>/srvSocio</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>srvTarjetaCredito</servlet-name>
+        <url-pattern>/srvTarjetaCredito</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>srvUsuario</servlet-name>
+        <url-pattern>/srvUsuario</url-pattern>
+    </servlet-mapping>
+    
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+  
+</web-app>

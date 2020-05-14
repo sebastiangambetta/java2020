@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+
+    <head>
+        <title>Alquiler Peliculas</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            function Valida() {
+                if (document.form.email.value === "") {
+                    alert("Please enter Login Name.");
+                    document.loginform.userName.focus();
+                    return false;
+                }
+                if (document.form.contrasena.value === "") {
+                    alert("Please enter password.");
+                    document.userform.password.focus();
+                    return false;
+                }
+                alert("Welcome User");
+                return true;
+            }
+        </script>
+
+    </head>
+    <body>
+
+        <form method="post" action="srvLogin" onsubmit="Valida()" >     
+            <div align="center"   style="background-color:ffeeff; margin-top: 200px; border:0">
+                <h1>Login</h1>
+                <table width="250px">
+                    <tr> <td>Usuario</td><td><input type="text" name="email"></td>  </tr>
+                    <tr> <td>Contraseña</td><td><input type="password" name="contrasena"></td> </tr>
+                    <tr> <td></td><td><input type="submit" name="login" value="Ingresar"></td> </tr>
+                </table>
+            </div>            
+
+        </form> 
+    </body>
+</html>
