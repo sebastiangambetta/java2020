@@ -20,7 +20,7 @@ import javax.servlet.RequestDispatcher;
 
 /**
  *
- * @author giuli
+ * @author
  */
 @WebServlet(name = "srvLogin", urlPatterns = {"/srvLogin"})
 public class srvLogin extends HttpServlet {
@@ -38,7 +38,6 @@ public class srvLogin extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     String var = "Bienvenido";
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -76,14 +75,12 @@ public class srvLogin extends HttpServlet {
         try {
             Usuario usuario = usuarioUI.Login(email, pass);
             if (usuario == null) {
-                
-                out.print("Sorry UserName or Password Error!");
-                //response.sendRedirect("./index.html");
-                RequestDispatcher rd=request.getRequestDispatcher("./index.html"); 
-                rd.include(request, response);                  
-            } else {               
-                
-                response.sendRedirect("srvLstUsuarios");
+            	request.setAttribute("Error", "Usuario o contraseña incorrecto!.");
+            	RequestDispatcher rd = request.getRequestDispatcher("./index.jsp"); 
+                rd.forward(request, response);            	
+           
+            } else {
+            	response.sendRedirect("srvLstUsuarios");            	
             }
 
         } catch (ClassNotFoundException | SQLException e) {

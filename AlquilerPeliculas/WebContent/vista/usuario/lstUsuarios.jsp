@@ -1,4 +1,3 @@
-
 <%@page import="java.util.ArrayList"%>
 <%@page import="entities.Usuario"%>
 
@@ -6,77 +5,94 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <link rel="stylesheet" href="css/bootstrap.min.css">   		
-        <script src="js/bootstrap.min.js"></script>   
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <script src="../../js/bootstrap.min.js" type="text/javascript"></script>
-    </head>
-    <body>
+<head>
+<title>Listado de usuarios</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
 
-        <script>
+h2{
+align: center;
+}
+</style>
+</head>
+<body>
+
+	<script>
 function Confirm() {
   !confirm("Esta seguro de eliminar el usuario");
 }
 </script>
-        
-        <div class="container">
-            <form method="Post" action="srvLstUsuarios">
-                <h2>Listado de usuarios</h2>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Id Usuario</th>
-                            <th>Usuario</th>
-                            <th>Actualizar</th>
-                            <th>Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
 
-                        <%
-                            ArrayList<Usuario> list = (ArrayList<Usuario>) request.getAttribute("lstUsuarios");
-                            for (Usuario usu : list) {
+	<div class="container">
+		<form method="Post" action="srvLstUsuarios">
+			<h2>Listado de usuarios</h2>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Id Usuario</th>
+						<th>Usuario</th>
+						<th>Actualizar</th>
+						<th>Eliminar</th>
+					</tr>
+				</thead>
+				<tbody>
 
-                        %>
-                        
-                        <tr>
-                            <th><%=usu.getIdUsuario()%></th>
-                            <th><%=usu.getEmail()%></th>
-                            <th>
-                    <form method="GET" action="srvLstUsuarios">
-                        <button class="btn-info">Editar</button>
-                        <input type="hidden" name="action" value="edit">
-                        <input type="hidden" name="id" value="<%=usu.getIdUsuario()%>" >
-                    </form>
-                    </th>
-                    <th>
-                    <form method="GET" action="srvLstUsuarios" onclick="Confirm())">
-                        <button class="btn-danger">Eliminar</button>
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="id" value="<%=usu.getIdUsuario()%>" >
-                    </form>
-                    </th>
-                    </tr>
-                    <tr>
-                    </tr>
-                    <%
-                        }
-                    %>  
-                    <tbody>
-                </table>
+					<%
+						ArrayList<Usuario> list = (ArrayList<Usuario>) request.getAttribute("lstUsuarios");
+					for (Usuario usu : list) {
+					%>
 
-                <div id="new">
-                    <!--<a class="btn-info" href="srvLstUsuarios?action=insert">Nuevo</a>-->                    
-                    <form method="get" action="srvLstUsuarios">
-                        <button class="btn-info">Agregar</button>
-                        <input type="hidden" name="action" value="add">
-                    </form>                    
-                </div>            
-            </form>
+					<tr>
+						<th><%=usu.getIdUsuario()%></th>
+						<th><%=usu.getEmail()%></th>
+						<th>
+							<form method="GET" action="srvLstUsuarios">								
+								<input type="hidden" class="btn-info" name="edit" value="Editar"> <input
+									type="hidden" name="id" value="<%=usu.getIdUsuario()%>">
+							</form>
+						</th>
+						<th>
+							<form method="GET" action="srvLstUsuarios" onclick="Confirm())">								
+								<input type="submit" class="btn-danger" name="delete" value="Eliminar"> <input
+									type="hidden" name="id" value="<%=usu.getIdUsuario()%>">
+							</form>
+						</th>
+						<th>
+							<form method="GET" action="srvLstUsuarios">
+								<input type="submit" class="btn-info" name="action" value="Agregar">
+							</form>
+						</th>
+					</tr>
+					<tr>
+					</tr>
+					<%
+						}
+					%>
+				
+				<tbody>
+			</table>
 
-            <a class="btn-info" href="index.html">Volver</a>  
-        </div>
-    </body>
+			<div class="container">
+				<div class="row">
+					<div class="back col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<button type="button" class="btn-info" onclick="history.back()">Volver</button>
+					</div>
+					<!--   
+					<div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
+						<form method="get" action="srvLstUsuarios" value="add">							
+							<input type="submit" class="btn-info" name="action"
+								value="Agregar">
+						</form>
+					</div>
+					-->
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+</body>
 </html>

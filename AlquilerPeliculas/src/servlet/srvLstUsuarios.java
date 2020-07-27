@@ -41,7 +41,6 @@ public class srvLstUsuarios extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
 
         String forward = "";
         String action = "lstUser";
