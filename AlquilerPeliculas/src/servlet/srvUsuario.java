@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entities.Socio;
 import entities.Usuario;
+import business.SocioUI;
 import business.UsuarioUI;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ public class srvUsuario extends HttpServlet {
     
     
     UsuarioUI usuarioUI = new UsuarioUI();
+    
+    SocioUI socioUI = new SocioUI();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -81,17 +85,19 @@ public class srvUsuario extends HttpServlet {
         } else if (action.equalsIgnoreCase("edit")) {
 
             forward = INSERT_OR_EDIT;
-            int userId = Integer.parseInt(request.getParameter("userId"));
+            int id = Integer.parseInt(request.getParameter("id"));            
+            Socio socio;
             Usuario usuario;
             try {
-                usuario = usuarioUI.getUserbyId(userId);
+            	usuario = usuarioUI.getUserbyId(id);
+                socio = socioUI.getSocio(usuario.getIdUsuario());                
+                request.setAttribute("socio", socio);
                 request.setAttribute("usuario", usuario);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
                 Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
             
             forward = INSERT_OR_EDIT;
             RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
@@ -134,7 +140,89 @@ public class srvUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);        
+        
+        Usuario usuario = new Usuario();
+		Socio socio = new Socio();
+
+		//Integer id;
+
+		socio.setNombre(request.getParameter("nombre"));
+		socio.setApellido(request.getParameter("apellido"));
+		socio.setDomicilio(request.getParameter("domicilio"));
+		socio.setEstado(request.getParameter("estado"));
+		socio.setTelefono(request.getParameter("telefono"));
+		socio.setMail(request.getParameter("uEmail"));
+		socio.setEstado(request.getParameter("estado").toString() != ""? request.getParameter("estado").toString(): null);
+
+		usuario.setEmail(request.getParameter("uEmail"));
+		usuario.setContrasena(request.getParameter("contrasena"));
+		usuario.setAcceso("usuario");
+
+		if (request.getParameter("nroTarjeta") == null || request.getParameter("nroTarjeta") == "") {
+			socio.setNroTarjeta(null);
+		} else {
+			String tarjeta = request.getParameter("nroTarjeta");
+			socio.setNroTarjeta(Integer.parseInt(tarjeta));
+		}
+
+		if ("null".equals(request.getParameter("id"))) {
+
+			try {
+				usuarioUI.addUsuario(usuario, socio);
+			} 
+			catch (SQLException ex) {
+				Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+				
+				request.setAttribute("Error", "Ocurrio un error.");
+	        	RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp"); 
+	            rd.forward(request, response);
+			}
+
+		} else
+
+			try {
+
+				socioUI.updateSocio(socio);
+				usuarioUI.updateUsuario(usuario);
+				request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
+			} 
+		catch (ClassNotFoundException ex) {
+				Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+				
+				request.setAttribute("Error", "Ocurrio un error.");
+	        	RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp"); 
+	            rd.forward(request, response);
+			} 
+		catch (SQLException ex) {
+				Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+				
+				request.setAttribute("Error", "Ocurrio un error.");
+	        	RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp"); 
+	            rd.forward(request, response);
+			}
+
+		try {
+			request.setAttribute("lstUsuarios", usuarioUI.getUsuarios());
+		} 
+		catch (SQLException ex) {
+			Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+			
+			request.setAttribute("Error", "Ocurrio un error.");
+        	RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp"); 
+            rd.forward(request, response);
+            
+		} 
+		catch (ClassNotFoundException ex) {
+			Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+			
+			request.setAttribute("Error", "Ocurrio un error.");
+        	RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp"); 
+            rd.forward(request, response);
+		}
+		request.getRequestDispatcher(LIST_USER).forward(request, response);
+        
+        
     }
 
     /**

@@ -41,7 +41,7 @@
 								}
 							%>
 						
-						<h1 class="text-center">Login Page</h1>
+						<h1 class="text-center">Login</h1>
 						<br>
 
 						<div class="form-group">

@@ -7,12 +7,15 @@ package data;
 
 import java.sql.Connection;
 import entities.Usuario;
+import servlet.srvLstUsuarios;
 import entities.Socio;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,192 +23,190 @@ import java.util.ArrayList;
  */
 public class UsuarioDAO extends Conexion {
 
-    Connection conn = null;
+	Connection conn = null;
 
-    public void addUsuario(Usuario user, Socio socio) throws SQLException {
-        conn = this.getConnection();
-        PreparedStatement st = null;
-        int rowAffected;
-        ResultSet rs = null;
-        try {
-            
-            
-            conn.setAutoCommit(false); 
-            
-            String query = "insert into socio(nombre, apellido, domicilio, telefono, nroTarjeta, estado) "
-                    + "values(?, ?, ?, ?, ?, ?)";
-            
-            st = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            
-            st.setString(1, socio.getNombre());
-            st.setString(2, socio.getApellido());
-            st.setString(3, socio.getDomicilio());
-            st.setString(4, socio.getTelefono());
-            if(socio.getNroTarjeta() == null)
-            {
-                st.setNull(5, java.sql.Types.INTEGER);
-            }
-            else
-            {
-                st.setInt(5, socio.getNroTarjeta());
-            }
-            
-            st.setString(6, socio.getEstado());
-            
-            rowAffected = st.executeUpdate();
+	public void addUsuario(Usuario user, Socio socio) throws SQLException {
+		conn = this.getConnection();
+		PreparedStatement insertSocio = null;
+		PreparedStatement insertUsuario = null;
+		int rowAffected;
+		ResultSet rs = null;
+		try {
 
-            //get candidate id
-            rs = st.getGeneratedKeys();
-            
-            //Verificar
-            st.close();
-            int candidateId = 0;
-            if (rs.next()) {
-                candidateId = rs.getInt(1);
-            }
+			conn.setAutoCommit(false);
 
-            // in case the insert operation successes, assign skills to candidate
-            if (rowAffected == 1) {
+			String query = "insert into socio(nombre, apellido, domicilio, telefono, mail, nroTarjeta, estado) "
+					+ "values(?, ?, ?, ?, ?, ?)";
 
-                user.setIdUsuario(candidateId);
+			insertSocio = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-                st = conn.prepareStatement("insert into usuario(idUsuario, email, contrasena) values(?, ?, ?)");
+			insertSocio.setString(1, socio.getNombre());
+			insertSocio.setString(2, socio.getApellido());
+			insertSocio.setString(3, socio.getDomicilio());
+			insertSocio.setString(4, socio.getTelefono());
+			insertSocio.setString(5, socio.getMail());
+			if (socio.getNroTarjeta() == null) {
+				insertSocio.setNull(6, java.sql.Types.INTEGER);
+			} else {
+				insertSocio.setInt(6, socio.getNroTarjeta());
+			}
 
-                st.setInt(1, user.getIdUsuario());
-                st.setString(2, user.getEmail());
-                st.setString(3, user.getContrasena());
-                
-                rowAffected = st.executeUpdate();
-                
-                if (rowAffected != 1)
-                    throw new SQLException();                
-                
-            }
+			insertSocio.setString(7, socio.getEstado());
 
-            conn.commit();
-            st.close();
-            conn.close();
+			rowAffected = insertSocio.executeUpdate();
 
-        } catch (SQLException ex) {
-            conn.rollback();
-        } finally {
-            try {
-                if (st != null) {
-                    st.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
+			// get candidate id
+			rs = insertSocio.getGeneratedKeys();
 
-            } catch (SQLException ex) {
-                System.out.printf(ex.getMessage());
-            }
-        }
+			// Verificar
+			// st.close();
+			
+			int candidateId = 0;
+			if (rs.next()) {
+				candidateId = rs.getInt(1);
+			}
+			
+			if (rowAffected == 1) {
 
-    }
+				user.setIdUsuario(candidateId);
 
-    public int deleteUsuario(int idUsuario) throws ClassNotFoundException, SQLException {
+				insertUsuario = conn.prepareStatement(
+						"insert into usuario(idUsuario, email, contrasena, nivelAcceso) values(?, ?, ?, ?)");
 
-        conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("delete from usuario where idUsuario = ? ");
-        stmt.setInt(1, Integer.valueOf(idUsuario));
-        int rta = stmt.executeUpdate();
-        
-        if(rta == 1)
-        {
-            stmt = conn.prepareStatement("delete from socio where nroSocio = ? ");
-            stmt.setInt(1, Integer.valueOf(idUsuario));
-            rta = stmt.executeUpdate();
-        }
-        
-        return rta;
+				insertUsuario.setInt(1, user.getIdUsuario());
+				insertUsuario.setString(2, user.getEmail());
+				insertUsuario.setString(3, user.getContrasena());
+				insertUsuario.setString(4, user.getAcceso());
 
-    }
+				rowAffected = insertUsuario.executeUpdate();
 
-    public int editUsuario(Usuario user) throws ClassNotFoundException, SQLException {
+				if (rowAffected != 1)
+					throw new SQLException();
+			}
 
-        conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("update usuario set email = ?, contrasena = ?"
-                + " where idUsuario = ?");
-        stmt.setString(1, user.getEmail());
-        stmt.setString(2, user.getContrasena());
-        stmt.setInt(3, Integer.valueOf(user.getIdUsuario()));
-        int rta = stmt.executeUpdate();
+			conn.commit();			
+			insertSocio.close();
+			insertUsuario.close();
+			conn.close();
 
-        stmt.close();
-        conn.close();
+		} 
+		catch (SQLException ex) {
+			Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+			conn.rollback();
+		} finally {
 
-        return rta;
-    }
+			if (insertSocio != null) {
+				insertSocio.close();
+			}
+			if (insertUsuario != null) {
+				insertUsuario.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+			conn.setAutoCommit(true);			
+		}
+	}
 
-    public Usuario Login(String email, String contrasena) throws ClassNotFoundException, SQLException {
-        Usuario user = new Usuario();
-        conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("select * from usuario where email = ? and contrasena=?");
-        stmt.setString(1, email);
-        stmt.setString(2, contrasena);
-        ResultSet rs = stmt.executeQuery();
-        if (!rs.next()) {
-            return null;
-        } else {
-            do {
-                user.setIdUsuario(rs.getInt("idUsuario"));
-                user.setEmail(rs.getString("email"));
-                user.setContrasena(rs.getString("contrasena"));
-            } while (rs.next());
-        }
+	public int deleteUsuario(int idUsuario) throws ClassNotFoundException, SQLException {
 
-        rs.close();
-        conn.close();
-        return user;
+		conn = this.getConnection();
+		PreparedStatement stmt = conn.prepareStatement("delete from usuario where idUsuario = ? ");
+		stmt.setInt(1, Integer.valueOf(idUsuario));
+		int rta = stmt.executeUpdate();
 
-    }
+		if (rta == 1) {
+			stmt = conn.prepareStatement("delete from socio where nroSocio = ? ");
+			stmt.setInt(1, Integer.valueOf(idUsuario));
+			rta = stmt.executeUpdate();
+		}
 
-    public Usuario getUsuario(int id) throws ClassNotFoundException, SQLException {
-        Usuario user = new Usuario();
-        conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("select * from usuario where idUsuario = ?");
-        stmt.setInt(1, id);
-        ResultSet rs = stmt.executeQuery();
-        if (!rs.next()) {
-            return null;
-        } else {
-            do {
-                user.setIdUsuario(rs.getInt("idUsuario"));
-                user.setEmail(rs.getString("email"));
-                user.setContrasena(rs.getString("contrasena"));
-            } while (rs.next());
-        }
+		return rta;
 
-        rs.close();
-        conn.close();
-        return user;
+	}
 
-    }
+	public int editUsuario(Usuario user) throws ClassNotFoundException, SQLException {
 
-    public ArrayList<Usuario> getUsuarios() throws SQLException, ClassNotFoundException {
-        ArrayList<Usuario> lstUsuarios = new ArrayList<Usuario>();
+		conn = this.getConnection();
+		PreparedStatement stmt = conn
+				.prepareStatement("update usuario set email = ?, contrasena = ?, nivelAcceso = ?" + " where idUsuario = ?");
+		stmt.setString(1, user.getEmail());
+		stmt.setString(2, user.getContrasena());
+		stmt.setString(3, user.getAcceso());
+		stmt.setInt(4, Integer.valueOf(user.getIdUsuario()));
+		int rta = stmt.executeUpdate();
 
-        conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("select * from usuario");
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Usuario user = new Usuario();
+		stmt.close();
+		conn.close();
 
-            user.setIdUsuario(rs.getInt("idUsuario"));
-            user.setEmail(rs.getString("email"));
-            user.setContrasena(rs.getString("contrasena"));
+		return rta;
+	}
 
-            lstUsuarios.add(user);
-        }
+	public Usuario Login(String email, String contrasena) throws ClassNotFoundException, SQLException {
+		Usuario user = new Usuario();
+		conn = this.getConnection();
+		PreparedStatement stmt = conn.prepareStatement("select * from usuario where email = ? and contrasena=?");
+		stmt.setString(1, email);
+		stmt.setString(2, contrasena);
+		ResultSet rs = stmt.executeQuery();
+		if (!rs.next()) {
+			return null;
+		} else {
+			do {
+				user.setIdUsuario(rs.getInt("idUsuario"));
+				user.setEmail(rs.getString("email"));
+				user.setContrasena(rs.getString("contrasena"));
+			} while (rs.next());
+		}
 
-        rs.close();
-        conn.close();
+		rs.close();
+		conn.close();
+		return user;
 
-        return lstUsuarios;
-    }
+	}
+
+	public Usuario getUsuario(int id) throws ClassNotFoundException, SQLException {
+		Usuario user = new Usuario();
+		conn = this.getConnection();
+		PreparedStatement stmt = conn.prepareStatement("select * from usuario where idUsuario = ?");
+		stmt.setInt(1, id);
+		ResultSet rs = stmt.executeQuery();
+		if (!rs.next()) {
+			return null;
+		} else {
+			do {
+				user.setIdUsuario(rs.getInt("idUsuario"));
+				user.setEmail(rs.getString("email"));
+				user.setContrasena(rs.getString("contrasena"));
+			} while (rs.next());
+		}
+
+		rs.close();
+		conn.close();
+		return user;
+
+	}
+
+	public ArrayList<Usuario> getUsuarios() throws SQLException, ClassNotFoundException {
+		ArrayList<Usuario> lstUsuarios = new ArrayList<Usuario>();
+
+		conn = this.getConnection();
+		PreparedStatement stmt = conn.prepareStatement("select * from usuario");
+		ResultSet rs = stmt.executeQuery();
+		while (rs.next()) {
+			Usuario user = new Usuario();
+
+			user.setIdUsuario(rs.getInt("idUsuario"));
+			user.setEmail(rs.getString("email"));
+			user.setContrasena(rs.getString("contrasena"));
+
+			lstUsuarios.add(user);
+		}
+
+		rs.close();
+		conn.close();
+
+		return lstUsuarios;
+	}
 
 }

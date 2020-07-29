@@ -13,6 +13,13 @@ public class Usuario {
     private int idUsuario;
 	private String email;
 	private String contrasena;
+	private String acceso;
+	public String getAcceso() {
+		return acceso;
+	}
+	public void setAcceso(String acceso) {
+		this.acceso = acceso;
+	}
 	public int getIdUsuario() {
 		return idUsuario;
 	}

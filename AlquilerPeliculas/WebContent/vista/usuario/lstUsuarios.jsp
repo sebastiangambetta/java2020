@@ -10,23 +10,49 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style>
+h2 {
+	align: center;
+}
 
-h2{
-align: center;
+.agregar {
+	text-align: -webkit-right;
+}
+
+.container {
+	margin-top: 50px;
+	background-color: #e9ecef;
+}
+
+.title {
+	text-align: center;
+	margin-bottom: 50px;
 }
 </style>
 </head>
 <body>
 
 	<script>
-function Confirm() {
-  !confirm("Esta seguro de eliminar el usuario");
-}
-</script>
+		function Confirm() {
+			!confirm("Esta seguro de eliminar el usuario");
+		}
+	</script>
 
-	<div class="container">
+	<div class="container card card-body">
 		<form method="Post" action="srvLstUsuarios">
-			<h2>Listado de usuarios</h2>
+			<%
+				String error = (String) request.getAttribute("Error");
+			if (error != null) {
+			%><div class="alert alert-warning">
+				<%=error%>
+			</div>
+			<%
+				}
+			%>
+
+			<div class="title">
+				<h2>Listado de usuarios</h2>
+			</div>
+
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -37,34 +63,19 @@ function Confirm() {
 					</tr>
 				</thead>
 				<tbody>
-
 					<%
 						ArrayList<Usuario> list = (ArrayList<Usuario>) request.getAttribute("lstUsuarios");
 					for (Usuario usu : list) {
 					%>
-
 					<tr>
 						<th><%=usu.getIdUsuario()%></th>
 						<th><%=usu.getEmail()%></th>
-						<th>
-							<form method="GET" action="srvLstUsuarios">								
-								<input type="hidden" class="btn-info" name="edit" value="Editar"> <input
-									type="hidden" name="id" value="<%=usu.getIdUsuario()%>">
-							</form>
+						<th><a class="btn btn-info"
+							href="srvUsuario?action=edit&id=<%=usu.getIdUsuario()%>">Editar</a>
 						</th>
-						<th>
-							<form method="GET" action="srvLstUsuarios" onclick="Confirm())">								
-								<input type="submit" class="btn-danger" name="delete" value="Eliminar"> <input
-									type="hidden" name="id" value="<%=usu.getIdUsuario()%>">
-							</form>
+						<th><a class="btn btn-danger"
+							href="srvUsuario?action=delete&id=<%=usu.getIdUsuario()%>">Eliminar</a>
 						</th>
-						<th>
-							<form method="GET" action="srvLstUsuarios">
-								<input type="submit" class="btn-info" name="action" value="Agregar">
-							</form>
-						</th>
-					</tr>
-					<tr>
 					</tr>
 					<%
 						}
@@ -76,16 +87,15 @@ function Confirm() {
 			<div class="container">
 				<div class="row">
 					<div class="back col-lg-6 col-md-6 col-sm-6 col-xs-12">
-						<button type="button" class="btn-info" onclick="history.back()">Volver</button>
+						<button type="button" class="btn btn-info"
+							onclick="history.back()">Volver</button>
 					</div>
-					<!--   
-					<div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-						<form method="get" action="srvLstUsuarios" value="add">							
-							<input type="submit" class="btn-info" name="action"
+					<div class="agregar col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<form method="GET" action="srvLstUsuarios">
+							<input type="submit" class="btn btn-info" name="action"
 								value="Agregar">
 						</form>
 					</div>
-					-->
 				</div>
 			</div>
 		</form>

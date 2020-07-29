@@ -9,106 +9,142 @@
 <%@page import="entities.Socio"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="css/bootstrap.min.css">   		
-        <script src="js/bootstrap.min.js"></script>   
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Usuario</title>
-    </head>
-    <body>       
+<head>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+.title {
+	text-align: center;
+	margin-bottom: 50px;
+	margin-top: 30px;
+}
 
-        <%
-            Usuario user = (Usuario) request.getAttribute("user");
+.container {
+	margin-top: 50px;
+	background-color: #e9ecef;
+}
+
+.savebtn {
+	text-align: right;
+}
+.buttons{
+margin-top: 45px;
+}
+
+.usu{
+text-align: center;
+}
+</style>
+<title>Usuario</title>
+</head>
+<body>
+
+	<%            
+	Usuario user = (Usuario) request.getAttribute("usuario");
             Socio socio = (Socio) request.getAttribute("socio");
         %>
 
-        <div id="container" style="margin: 20px 20px 20px 20px">
-            <div style="text-align: center; margin-bottom: 40px"><h1>Alta de Usuario</h1></div>
-            <form  method="POST" action="srvLstUsuarios" name="frmAddUser">                
-                <input type="hidden" name="action" value="add" />
-                <div class="row">
-                    <div class="col-md-3">                        
-                        <input type="hidden" class="form-control" name="id" value="<%=socio.getNroSocio()  != 0? socio.getNroSocio(): null%>">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <label class="sr-only" for="nombre">Nombre :</label>
-                        <input type="text" class="form-control" name="nombre" value="<%=socio.getNombre() != null? socio.getNombre(): ""%>" placeholder="Nombre" required>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="sr-only" for="apellido">Apellido :</label>
-                            <input type="text" class="form-control" name="apellido" value="<%=socio.getApellido() != null? socio.getApellido(): ""%>" placeholder="Apellido" required>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="sr-only" for="domicilio">Domicilio :</label>
-                        <input type="text" class="form-control" name="domicilio" value="<%=socio.getDomicilio() != null? socio.getDomicilio(): ""%>" placeholder="Domicilio" required>
-                    </div> 
-                    <div class="col-md-3">
-                        <label class="sr-only" for="telefono">Telefono :</label>
-                        <input type="text" class="form-control" name="telefono" value="<%=socio.getTelefono() != null? socio.getTelefono(): ""%>" placeholder="Telefono" required>
-                    </div>
-                </div>
-                <div class="row">                    
-                    <div class="col-md-3">
-                        <label class="sr-only" for="nroTarjeta">N° Tarjeta del banco :</label>
-                        <input type="text" class="form-control" name="nroTarjeta" value="<%=socio.getNroTarjeta() != null? socio.getNroTarjeta(): ""%>" placeholder="N° Tarjeta del banco">
-                    </div>
-                    <div class="col-md-3">    
-                        <div class="row">
-                        <div class="col-md-8">
-                            <label for="sel1" >Recibe notificaciones de extrenos :</label>    
-                        </div>
-                        <div class="col-md-4">
-                            <select class="form-control" name="estado" value="<%=socio.getEstado()%>">
-                                <option value="1">Si</option>
-                                <option value="0">NO</option>    
-                            </select>
-                        </div>
-                            </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <!--<input type="text" name="email" value="<%= user.getEmail() != null? user.getEmail(): ""%>" required placehorlder="Email" />-->
-                        <label class="sr-only" for="email">Email :</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
-                    </div>
-                    <div class="col-md-3">
-                   <!--<input type="password" name="contrasena" <%= user.getContrasena() %> required placehorlder="Contraseña" />-->
-                        <label class="sr-only" for="contrasena">Contraseña:</label>
-                        <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
-                    </div>
-                </div>                
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">                                
-                                    <!--<button class="btn-success">Guardar</button>  -->
-                                    <form method="POST" action="srvLstUsuarios">
-                        <button class="btn-success">Guardar</button>
-                        <input type="hidden" name="action" value="save">                        
-                    </form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                    <form method="G" action="srvLstUsuarios">
-                                <button class="btn btn-success">Cancelar</button>
-                                <input type="hidden" name="action" value="lstUser">
-                    </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                        <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">                                
-                                <a class="btn-info" href="index.html"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-    </form>
-</div>
+	<form method="post" action="srvUsuario">
+		<div class="container card card-body">
+			<%
+								String error = (String) request.getAttribute("Error");
+							if (error != null) {
+							%><div class="alert alert-warning">
+				<%=error%>
+			</div>
+			<%
+								}
+							%>
+			<div class="title">
+				<h1>Datos del Socio</h1>
+			</div>
+			<div class="usu row">
+				<div class="col-md-3">
+					<input type="hidden" class="form-control" name="id"
+						value="<%=socio.getNroSocio()%>">
+				</div>
+			</div>
+			<div class="usu row">
+				<div class="col-md-3">
+					<label for="nombre">Nombre</label> <input
+						type="text" class="form-control" name="nombre"
+						value="<%=socio.getNombre() != null? socio.getNombre(): ""%>"
+						placeholder="Nombre" required>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label for="apellido">Apellido</label> <input
+							type="text" class="form-control" name="apellido"
+							value="<%=socio.getApellido() != null? socio.getApellido(): ""%>"
+							placeholder="Apellido" required>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label for="domicilio">Domicilio</label> <input
+						type="text" class="form-control" name="domicilio"
+						value="<%=socio.getDomicilio() != null? socio.getDomicilio(): ""%>"
+						placeholder="Domicilio" required>
+				</div>
+				<div class="col-md-3">
+					<label for="telefono">Telefono</label> <input
+						type="text" class="form-control" name="telefono"
+						value="<%=socio.getTelefono() != null? socio.getTelefono(): ""%>"
+						placeholder="Telefono" required>
+				</div>
+			</div>
+			<div class="usu row">
+				<div class="col-md-3">
+					<label for="nroTarjeta">N° Tarjeta del banco </label> 
+					<input type="text" class="form-control" name="nroTarjeta"
+						value="<%=socio.getNroTarjeta() != 0? socio.getNroTarjeta(): ""%>"
+						placeholder="N° Tarjeta del banco">
+				</div>
+				<div class="col-md-3">
+					<div class="row">
+						<div class="col-md-8">
+							<label for="sel1">Recibe notificaciones de extrenos :</label>
+						</div>
+						<div class="col-md-4">
+							<select class="form-control" name="estado"
+								value="<%=socio.getEstado()%>">
+								<option value=""></option>
+								<option value="1">Si</option>
+								<option value="0">NO</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="title">
+					<h1>Datos del Usuario</h1>
+				</div>
+			<div class="usu row">				
+				<div class="col-md-3">
+					<label  for="Email">Email</label> 
+					<input type="text" class="form-control" id="uEmail"
+					value="<%=user.getEmail() != null? user.getEmail(): ""%>"
+						name="uEmail" placeholder="email" required>
+				</div>
+				<div class="col-md-3">
+				<!--  class="sr-only" para que no se vea el label -->
+					<label for="contrasena">Contraseña:</label> 
+					<input type="password" class="form-control" id="contrasena"
+					value="<%=user.getContrasena() != null? user.getContrasena(): ""%>"
+						name="contrasena" placeholder="Contraseña" required>
+				</div>
+			</div>
+			<div class="buttons row">
+				<div class="col-md-6">
+					<button type="button" class="btn btn-info" onclick="history.back()">Volver</button>
+				</div>
+				<div class="savebtn col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<input class="btn btn-info" type="submit" name="save"
+						value="Guardar">
+				</div>
+			</div>
+		</div>
+	</form>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 </body>
 </html>
