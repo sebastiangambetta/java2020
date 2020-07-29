@@ -58,9 +58,9 @@ public class UsuarioUI {
         return rta == 1 ? true : false;
     }
     
-    public boolean updateUsuario(Usuario usu) throws SQLException, ClassNotFoundException {
+    public boolean updateUsuario(Usuario usu, Socio socio) throws SQLException, ClassNotFoundException {
 
-        int rta = usuarioDAO.editUsuario(usu);
+        int rta = usuarioDAO.editUsuario(usu, socio);
         return rta == 1 ? true : false;
     }
 }

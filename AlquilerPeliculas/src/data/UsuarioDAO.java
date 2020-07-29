@@ -125,21 +125,64 @@ public class UsuarioDAO extends Conexion {
 
 	}
 
-	public int editUsuario(Usuario user) throws ClassNotFoundException, SQLException {
+	public int editUsuario(Usuario user, Socio s) throws ClassNotFoundException, SQLException {
 
-		conn = this.getConnection();
-		PreparedStatement stmt = conn
-				.prepareStatement("update usuario set email = ?, contrasena = ?, nivelAcceso = ?" + " where idUsuario = ?");
-		stmt.setString(1, user.getEmail());
-		stmt.setString(2, user.getContrasena());
-		stmt.setString(3, user.getAcceso());
-		stmt.setInt(4, Integer.valueOf(user.getIdUsuario()));
-		int rta = stmt.executeUpdate();
+			conn = this.getConnection();
+			PreparedStatement stmt = null;
+			PreparedStatement st = null;
+			int rta = 0;
+    	
+    	try {    		
+    		
+    		conn.setAutoCommit(false);
+    		
+    		stmt = conn.prepareStatement(
+    				"update usuario set email = ?, contrasena = ?, nivelAcceso = ?" + " where idUsuario = ?");
+    		stmt.setString(1, user.getEmail());
+    		stmt.setString(2, user.getContrasena());
+    		stmt.setString(3, user.getAcceso());
+    		stmt.setInt(4, Integer.valueOf(user.getIdUsuario()));
+    		rta = stmt.executeUpdate();
 
-		stmt.close();
-		conn.close();
+    		st = conn.prepareStatement("update socio set nombre = ?, apellido = ?, domicilio = ?, telefono = ?, mail = ?, nroTarjeta = ?"
+                    + ", estado = ? where nroSocio = ?");
 
-		return rta;
+            st.setString(1, s.getNombre());
+            st.setString(2, s.getApellido());
+            st.setString(3, s.getDomicilio());
+            st.setString(4, s.getTelefono());
+            st.setString(5, s.getMail());
+            st.setInt(6, s.getNroTarjeta());
+            st.setString(7, s.getEstado());
+            st.setInt(8, s.getNroSocio());
+            rta = stmt.executeUpdate();
+            
+            conn.commit();
+            st.close();            
+    		stmt.close();
+    		conn.close();
+    		
+    		return rta;
+
+    	}
+
+    	catch (SQLException ex) {
+    			Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+    			conn.rollback();
+    		} finally {
+
+    			if (stmt != null) {
+    				stmt.close();
+    			}
+    			if (st != null) {
+    				st.close();
+    			}
+    			if (conn != null) {
+    				conn.close();
+    			}
+    			conn.setAutoCommit(true);			
+    		}
+		return rta;    	
 	}
 
 	public Usuario Login(String email, String contrasena) throws ClassNotFoundException, SQLException {

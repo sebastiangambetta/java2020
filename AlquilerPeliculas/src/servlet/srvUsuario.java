@@ -101,8 +101,7 @@ public class srvUsuario extends HttpServlet {
             
             forward = INSERT_OR_EDIT;
             RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
-            view.forward(request, response);
-            
+            view.forward(request, response);            
 
         } else if (action.equalsIgnoreCase("lstUser")) {
 
@@ -149,8 +148,7 @@ public class srvUsuario extends HttpServlet {
 
 		socio.setNombre(request.getParameter("nombre"));
 		socio.setApellido(request.getParameter("apellido"));
-		socio.setDomicilio(request.getParameter("domicilio"));
-		socio.setEstado(request.getParameter("estado"));
+		socio.setDomicilio(request.getParameter("domicilio"));		
 		socio.setTelefono(request.getParameter("telefono"));
 		socio.setMail(request.getParameter("uEmail"));
 		socio.setEstado(request.getParameter("estado").toString() != ""? request.getParameter("estado").toString(): null);
@@ -163,7 +161,9 @@ public class srvUsuario extends HttpServlet {
 			socio.setNroTarjeta(null);
 		} else {
 			String tarjeta = request.getParameter("nroTarjeta");
-			socio.setNroTarjeta(Integer.parseInt(tarjeta));
+			Long i = new Long(tarjeta);
+			socio.setNroTarjeta(i.intValue());
+			
 		}
 
 		if ("null".equals(request.getParameter("id"))) {
@@ -183,8 +183,8 @@ public class srvUsuario extends HttpServlet {
 
 			try {
 
-				socioUI.updateSocio(socio);
-				usuarioUI.updateUsuario(usuario);
+				//socioUI.updateSocio(socio);
+				usuarioUI.updateUsuario(usuario, socio);
 				request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
 			} 
 		catch (ClassNotFoundException ex) {

@@ -156,8 +156,8 @@ public class srvLstUsuarios extends HttpServlet {
 
 			try {
 
-				socioUI.updateSocio(socio);
-				usuarioUI.updateUsuario(usuario);
+//				socioUI.updateSocio(socio);
+				usuarioUI.updateUsuario(usuario, socio);
 				request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
 			} catch (ClassNotFoundException ex) {
 				Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
