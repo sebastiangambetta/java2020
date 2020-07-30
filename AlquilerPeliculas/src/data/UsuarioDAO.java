@@ -35,8 +35,8 @@ public class UsuarioDAO extends Conexion {
 
 			conn.setAutoCommit(false);
 
-			String query = "insert into socio(nombre, apellido, domicilio, telefono, mail, nroTarjeta, estado) "
-					+ "values(?, ?, ?, ?, ?, ?)";
+			String query = "insert into socio(nombre, apellido, domicilio, telefono, mail, banco, nroTarjeta, estado ) "
+					+ "values(?, ?, ?, ?, ?, ?, ?)";
 
 			insertSocio = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -45,21 +45,20 @@ public class UsuarioDAO extends Conexion {
 			insertSocio.setString(3, socio.getDomicilio());
 			insertSocio.setString(4, socio.getTelefono());
 			insertSocio.setString(5, socio.getMail());
-			if (socio.getNroTarjeta() == null) {
+			if (socio.getNroTarjeta() == null || socio.getBanco() == 0 ) {
 				insertSocio.setNull(6, java.sql.Types.INTEGER);
+				insertSocio.setNull(7, java.sql.Types.INTEGER);
 			} else {
-				insertSocio.setInt(6, socio.getNroTarjeta());
+				insertSocio.setInt(6, socio.getBanco());
+				insertSocio.setInt(7, socio.getNroTarjeta());
+				
 			}
 
-			insertSocio.setString(7, socio.getEstado());
+			insertSocio.setString(8, socio.getEstado());
 
 			rowAffected = insertSocio.executeUpdate();
-
-			// get candidate id
+			
 			rs = insertSocio.getGeneratedKeys();
-
-			// Verificar
-			// st.close();
 			
 			int candidateId = 0;
 			if (rs.next()) {
@@ -102,10 +101,11 @@ public class UsuarioDAO extends Conexion {
 				insertUsuario.close();
 			}
 			if (conn != null) {
+				conn.setAutoCommit(true);
 				conn.close();
-			}
-			conn.setAutoCommit(true);			
+			}			
 		}
+		
 	}
 
 	public int deleteUsuario(int idUsuario) throws ClassNotFoundException, SQLException {
@@ -144,18 +144,19 @@ public class UsuarioDAO extends Conexion {
     		stmt.setInt(4, Integer.valueOf(user.getIdUsuario()));
     		rta = stmt.executeUpdate();
 
-    		st = conn.prepareStatement("update socio set nombre = ?, apellido = ?, domicilio = ?, telefono = ?, mail = ?, nroTarjeta = ?"
-                    + ", estado = ? where nroSocio = ?");
+    		st = conn.prepareStatement("update socio set nombre = ?, apellido = ?, domicilio = ?, telefono = ?, mail = ?, banco = ?, "
+    				+ "nroTarjeta = ? , estado = ? where nroSocio = ?");
 
             st.setString(1, s.getNombre());
             st.setString(2, s.getApellido());
             st.setString(3, s.getDomicilio());
             st.setString(4, s.getTelefono());
             st.setString(5, s.getMail());
-            st.setInt(6, s.getNroTarjeta());
-            st.setString(7, s.getEstado());
-            st.setInt(8, s.getNroSocio());
-            rta = stmt.executeUpdate();
+            st.setInt(6, s.getBanco());
+            st.setInt(7, s.getNroTarjeta());
+            st.setString(8, s.getEstado());
+            st.setInt(9, s.getNroSocio());
+            rta = st.executeUpdate();
             
             conn.commit();
             st.close();            
@@ -170,17 +171,17 @@ public class UsuarioDAO extends Conexion {
     			Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
     			conn.rollback();
     		} finally {
-
+    			
     			if (stmt != null) {
     				stmt.close();
     			}
     			if (st != null) {
     				st.close();
     			}
-    			if (conn != null) {
+    			if (conn != null) {    				
     				conn.close();
     			}
-    			conn.setAutoCommit(true);			
+    					
     		}
 		return rta;    	
 	}
@@ -234,7 +235,7 @@ public class UsuarioDAO extends Conexion {
 		ArrayList<Usuario> lstUsuarios = new ArrayList<Usuario>();
 
 		conn = this.getConnection();
-		PreparedStatement stmt = conn.prepareStatement("select * from usuario");
+		PreparedStatement stmt = conn.prepareStatement("select idUsuario, email, contrasena, nivelAcceso from usuario where nivelAcceso <> 'admin' ");
 		ResultSet rs = stmt.executeQuery();
 		while (rs.next()) {
 			Usuario user = new Usuario();
@@ -242,6 +243,7 @@ public class UsuarioDAO extends Conexion {
 			user.setIdUsuario(rs.getInt("idUsuario"));
 			user.setEmail(rs.getString("email"));
 			user.setContrasena(rs.getString("contrasena"));
+			user.setAcceso(rs.getString("nivelAcceso"));
 
 			lstUsuarios.add(user);
 		}

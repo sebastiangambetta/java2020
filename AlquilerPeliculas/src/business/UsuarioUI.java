@@ -45,9 +45,7 @@ public class UsuarioUI {
     }
 
     public ArrayList<Usuario> getUsuarios() throws SQLException, ClassNotFoundException {
-        ArrayList<Usuario> lstUsuarios = new ArrayList<Usuario>();
-        //getUsuarios
-        lstUsuarios = usuarioDAO.getUsuarios();
+        ArrayList<Usuario> lstUsuarios = usuarioDAO.getUsuarios();
         return lstUsuarios;
     }
 

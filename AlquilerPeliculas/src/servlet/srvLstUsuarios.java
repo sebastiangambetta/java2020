@@ -7,6 +7,7 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -91,7 +92,8 @@ public class srvLstUsuarios extends HttpServlet {
 
 			try {
 				forward = LIST_USER;
-				request.setAttribute("lstUsuarios", usuarioUI.getUsuarios());
+				ArrayList<Usuario> lstUsuarios = usuarioUI.getUsuarios();
+				request.setAttribute("lstUsuarios", lstUsuarios);
 			} catch (SQLException ex) {
 				Logger.getLogger(srvLstUsuarios.class.getName()).log(Level.SEVERE, null, ex);
 			} catch (ClassNotFoundException ex) {

@@ -3,10 +3,15 @@
     Created on : 10/02/2020, 19:38:11
     Author     : giuli
 --%>
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="java.util.ArrayList"%>
+
 
 <%@page import="entities.Usuario"%>
 <%@page import="entities.Socio"%>
+<%@page import="entities.TarjetaCredito"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,34 +32,37 @@
 .savebtn {
 	text-align: right;
 }
-.buttons{
-margin-top: 45px;
+
+.buttons {
+	margin-top: 45px;
 }
 
-.usu{
-text-align: center;
+.usu {
+	text-align: center;
 }
 </style>
 <title>Usuario</title>
 </head>
 <body>
 
-	<%            
-	Usuario user = (Usuario) request.getAttribute("usuario");
-            Socio socio = (Socio) request.getAttribute("socio");
-        %>
+	<%
+		Usuario user = (Usuario) request.getAttribute("usuario");
+	Socio socio = (Socio) request.getAttribute("socio");
+	ArrayList<TarjetaCredito> tarjetas = (ArrayList<TarjetaCredito>) request.getAttribute("tarjetas");
+	
+	%>
 
 	<form method="post" action="srvUsuario">
 		<div class="container card card-body">
 			<%
-								String error = (String) request.getAttribute("Error");
-							if (error != null) {
-							%><div class="alert alert-warning">
+				String error = (String) request.getAttribute("Error");
+			if (error != null) {
+			%><div class="alert alert-warning">
 				<%=error%>
 			</div>
 			<%
-								}
-							%>
+				}
+			%>
 			<div class="title">
 				<h1>Datos del Socio</h1>
 			</div>
@@ -66,37 +74,54 @@ text-align: center;
 			</div>
 			<div class="usu row">
 				<div class="col-md-3">
-					<label for="nombre">Nombre</label> <input
-						type="text" class="form-control" name="nombre"
-						value="<%=socio.getNombre() != null? socio.getNombre(): ""%>"
+					<label for="nombre">Nombre</label> <input type="text"
+						class="form-control" name="nombre"
+						value="<%=socio.getNombre() != null ? socio.getNombre() : ""%>"
 						placeholder="Nombre" required>
 				</div>
 				<div class="col-md-3">
 					<div class="form-group">
-						<label for="apellido">Apellido</label> <input
-							type="text" class="form-control" name="apellido"
-							value="<%=socio.getApellido() != null? socio.getApellido(): ""%>"
+						<label for="apellido">Apellido</label> <input type="text"
+							class="form-control" name="apellido"
+							value="<%=socio.getApellido() != null ? socio.getApellido() : ""%>"
 							placeholder="Apellido" required>
 					</div>
 				</div>
 				<div class="col-md-3">
-					<label for="domicilio">Domicilio</label> <input
-						type="text" class="form-control" name="domicilio"
-						value="<%=socio.getDomicilio() != null? socio.getDomicilio(): ""%>"
+					<label for="domicilio">Domicilio</label> <input type="text"
+						class="form-control" name="domicilio"
+						value="<%=socio.getDomicilio() != null ? socio.getDomicilio() : ""%>"
 						placeholder="Domicilio" required>
 				</div>
 				<div class="col-md-3">
-					<label for="telefono">Telefono</label> <input
-						type="text" class="form-control" name="telefono"
-						value="<%=socio.getTelefono() != null? socio.getTelefono(): ""%>"
+					<label for="telefono">Telefono</label> <input type="text"
+						class="form-control" name="telefono"
+						value="<%=socio.getTelefono() != null ? socio.getTelefono() : ""%>"
 						placeholder="Telefono" required>
 				</div>
 			</div>
 			<div class="usu row">
 				<div class="col-md-3">
-					<label for="nroTarjeta">N° Tarjeta del banco </label> 
-					<input type="text" class="form-control" name="nroTarjeta"
-						value="<%=socio.getNroTarjeta() != 0? socio.getNroTarjeta(): ""%>"
+					<label for="Banco">Banco</label> <select class="form-control"
+						name="banco">
+
+						<%
+
+						for(TarjetaCredito tarj: tarjetas){
+									
+								%>
+
+						<option value="<%= tarj.getiIdTarjeta() %>" <%=   tarj.getiIdTarjeta() == socio.getBanco() ? "selected" : "" %>>
+							<%= tarj.getNombreTarjeta() %>
+						</option>
+
+						<% } %>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label for="nroTarjeta">N° Tarjeta del banco </label> <input
+						type="text" class="form-control" name="nroTarjeta"
+						value="<%=socio.getNroTarjeta() != 0 ? socio.getNroTarjeta() : ""%>"
 						placeholder="N° Tarjeta del banco">
 				</div>
 				<div class="col-md-3">
@@ -105,31 +130,36 @@ text-align: center;
 							<label for="sel1">Recibe notificaciones de extrenos :</label>
 						</div>
 						<div class="col-md-4">
-							<select class="form-control" name="estado"
-								value="<%=socio.getEstado()%>">
-								<option value=""></option>
-								<option value="1">Si</option>
-								<option value="0">NO</option>
+							<select class="form-control" name="estado">
+								<option value="" ${socio.getEstado() == "" ? 'selected' : ''}></option>
+								<option value="1" ${socio.getEstado() == "1" ? 'selected' : ''}>Si</option>
+								<option value="0" ${socio.getEstado() == "0" ? 'selected' : ''}>No</option>
 							</select>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="title">
-					<h1>Datos del Usuario</h1>
-				</div>
-			<div class="usu row">				
+				<h1>Datos del Usuario</h1>
+			</div>
+			<div class="usu row">
 				<div class="col-md-3">
-					<label  for="Email">Email</label> 
-					<input type="text" class="form-control" id="uEmail"
-					value="<%=user.getEmail() != null? user.getEmail(): ""%>"
+					<input type="hidden" class="form-control" name="Uid"
+						value="<%=user.getIdUsuario()%>">
+				</div>
+			</div>
+			<div class="usu row">
+				<div class="col-md-3">
+					<label for="Email">Email</label> <input type="text"
+						class="form-control" id="uEmail"
+						value="<%=user.getEmail() != null ? user.getEmail() : ""%>"
 						name="uEmail" placeholder="email" required>
 				</div>
 				<div class="col-md-3">
-				<!--  class="sr-only" para que no se vea el label -->
-					<label for="contrasena">Contraseña:</label> 
-					<input type="password" class="form-control" id="contrasena"
-					value="<%=user.getContrasena() != null? user.getContrasena(): ""%>"
+					<!--  class="sr-only" para que no se vea el label -->
+					<label for="contrasena">Contraseña:</label> <input type="password"
+						class="form-control" id="contrasena"
+						value="<%=user.getContrasena() != null ? user.getContrasena() : ""%>"
 						name="contrasena" placeholder="Contraseña" required>
 				</div>
 			</div>

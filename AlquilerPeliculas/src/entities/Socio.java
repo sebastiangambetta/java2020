@@ -8,7 +8,14 @@ public class Socio{
     private String domicilio;
     private String telefono;
     private String mail;
-    private Integer nroTarjeta;
+    private Integer Banco;
+    public Integer getBanco() {
+		return Banco;
+	}
+	public void setBanco(Integer banco) {
+		Banco = banco;
+	}
+	private Integer nroTarjeta;
     private String estado;   
     
     public int getNroSocio() {

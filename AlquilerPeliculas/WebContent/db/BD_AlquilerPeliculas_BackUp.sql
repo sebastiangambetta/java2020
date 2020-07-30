@@ -139,11 +139,12 @@ CREATE TABLE `socio` (
   `domicilio` varchar(100) DEFAULT NULL,
   `telefono` varchar(100) DEFAULT NULL,
   `mail` varchar(100) DEFAULT NULL,
+  `banco` int(10) DEFAULT NULL,
   `nroTarjeta` int(18) DEFAULT NULL,
   `estado` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`nroSocio`),
   KEY `nroTarjeta` (`nroTarjeta`),
-  CONSTRAINT `Socio_fk_` FOREIGN KEY (`nroTarjeta`) REFERENCES `tarjetacredito` (`idTarjeta`) ON UPDATE CASCADE
+  CONSTRAINT `Socio_fk_` FOREIGN KEY (`banco`) REFERENCES `tarjetacredito` (`idTarjeta`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

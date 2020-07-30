@@ -66,6 +66,7 @@ h2 {
 					<%
 						ArrayList<Usuario> list = (ArrayList<Usuario>) request.getAttribute("lstUsuarios");
 					for (Usuario usu : list) {
+
 					%>
 					<tr>
 						<th><%=usu.getIdUsuario()%></th>
@@ -74,11 +75,11 @@ h2 {
 							href="srvUsuario?action=edit&id=<%=usu.getIdUsuario()%>">Editar</a>
 						</th>
 						<th><a class="btn btn-danger"
-							href="srvUsuario?action=delete&id=<%=usu.getIdUsuario()%>">Eliminar</a>
-						</th>
+							href="srvUsuario?action=delete&id=<%=usu.getIdUsuario()%>" onclick="Confirm()">Eliminar</a>
+						</th>						
 					</tr>
 					<%
-						}
+					}
 					%>
 				
 				<tbody>

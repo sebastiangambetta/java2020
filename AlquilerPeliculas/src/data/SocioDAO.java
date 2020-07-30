@@ -29,8 +29,8 @@ public class SocioDAO extends Conexion {
 		stmt.setString(2, s.getApellido());
 		stmt.setString(3, s.getDomicilio());
 		stmt.setString(4, s.getTelefono());
-		stmt.setInt(4, s.getNroTarjeta());
-		stmt.setString(4, s.getEstado());
+		stmt.setInt(5, s.getNroTarjeta());
+		stmt.setString(6, s.getEstado());
 
 		stmt.executeUpdate();
 		stmt.close();
@@ -89,6 +89,7 @@ public class SocioDAO extends Conexion {
 				s.setMail(rs.getString("mail"));
 				s.setNroTarjeta(rs.getInt("nroTarjeta"));
 				s.setEstado(rs.getString("estado"));
+				s.setBanco(rs.getInt("banco"));
 			} while (rs.next());
 		}
 
