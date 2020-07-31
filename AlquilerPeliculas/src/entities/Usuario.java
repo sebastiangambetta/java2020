@@ -14,6 +14,13 @@ public class Usuario {
 	private String email;
 	private String contrasena;
 	private String acceso;
+	private String estado;
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
 	public String getAcceso() {
 		return acceso;
 	}

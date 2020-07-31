@@ -88,7 +88,7 @@ public class SocioDAO extends Conexion {
 				s.setTelefono(rs.getString("telefono"));
 				s.setMail(rs.getString("mail"));
 				s.setNroTarjeta(rs.getInt("nroTarjeta"));
-				s.setEstado(rs.getString("estado"));
+				s.setEstado(rs.getString("envioMail"));
 				s.setBanco(rs.getInt("banco"));
 			} while (rs.next());
 		}

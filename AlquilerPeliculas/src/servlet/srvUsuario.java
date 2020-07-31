@@ -70,21 +70,7 @@ public class srvUsuario extends HttpServlet {
         if(request.getParameter("action") != null)
             action = request.getParameter("action");
 
-        if (action.equalsIgnoreCase("delete")) {
-
-            boolean exito = false;
-            int id = Integer.parseInt(request.getParameter("id"));
-            try {
-                exito = usuarioUI.deleteUsuario(id);
-                forward = LIST_USER;
-                request.setAttribute("usuarios", usuarioUI.getUsuarios());
-            } catch (SQLException ex) {
-                Logger.getLogger(srvUsuario.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(srvUsuario.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        } else if (action.equalsIgnoreCase("edit")) {
+        	if (action.equalsIgnoreCase("edit")) {
 
             forward = INSERT_OR_EDIT;
             int id = Integer.parseInt(request.getParameter("id"));            
@@ -121,11 +107,12 @@ public class srvUsuario extends HttpServlet {
 
             forward = LIST_USER;            
             request.setAttribute("lstUsuarios", lstUsuario);
-
+            
         } else {
             Usuario usuario = new Usuario();
             request.setAttribute("usuario", usuario);
-            forward = INSERT_OR_EDIT;            
+            forward = INSERT_OR_EDIT;   
+            
         }
         
         RequestDispatcher view = request.getRequestDispatcher(forward);

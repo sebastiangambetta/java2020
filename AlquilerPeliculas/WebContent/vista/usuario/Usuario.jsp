@@ -53,11 +53,14 @@
 	%>
 
 	<form method="post" action="srvUsuario">
-		<div class="container card card-body">
+		<div class="container card card-body">		
+			
 			<%
-				String error = (String) request.getAttribute("Error");
+			String error = (String) request.getAttribute("Error");
 			if (error != null) {
-			%><div class="alert alert-warning">
+			%>
+			
+			<div class="alert alert-warning">
 				<%=error%>
 			</div>
 			<%
@@ -105,15 +108,15 @@
 					<label for="Banco">Banco</label> <select class="form-control"
 						name="banco">
 
-						<%
-
+						<%					
+						
 						for(TarjetaCredito tarj: tarjetas){
-									
+							socio.setBanco(socio.getBanco() == null ? 1 : socio.getBanco());
 								%>
-
-						<option value="<%= tarj.getiIdTarjeta() %>" <%=   tarj.getiIdTarjeta() == socio.getBanco() ? "selected" : "" %>>
-							<%= tarj.getNombreTarjeta() %>
-						</option>
+								
+								<option value="<%= tarj.getiIdTarjeta() %>" <%= tarj.getiIdTarjeta() == socio.getBanco() ? "selected" : "" %> >
+								<%= tarj.getNombreTarjeta() %>
+								</option>
 
 						<% } %>
 					</select>
@@ -121,7 +124,7 @@
 				<div class="col-md-3">
 					<label for="nroTarjeta">N° Tarjeta del banco </label> <input
 						type="text" class="form-control" name="nroTarjeta"
-						value="<%=socio.getNroTarjeta() != 0 ? socio.getNroTarjeta() : ""%>"
+						value="<%=socio.getNroTarjeta() != null ? socio.getNroTarjeta() : ""%>"
 						placeholder="N° Tarjeta del banco">
 				</div>
 				<div class="col-md-3">

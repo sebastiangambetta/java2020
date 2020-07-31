@@ -38,7 +38,7 @@ h2 {
 	</script>
 
 	<div class="container card card-body">
-		<form method="Post" action="srvLstUsuarios">
+		<form method="Get" action="srvLstUsuarios">
 			<%
 				String error = (String) request.getAttribute("Error");
 			if (error != null) {
@@ -63,23 +63,25 @@ h2 {
 					</tr>
 				</thead>
 				<tbody>
-					<%
+					<%					
 						ArrayList<Usuario> list = (ArrayList<Usuario>) request.getAttribute("lstUsuarios");
+					if(!list.isEmpty())
+					{ 
 					for (Usuario usu : list) {
 
 					%>
-					<tr>
+					<tr>					
 						<th><%=usu.getIdUsuario()%></th>
 						<th><%=usu.getEmail()%></th>
 						<th><a class="btn btn-info"
-							href="srvUsuario?action=edit&id=<%=usu.getIdUsuario()%>">Editar</a>
+							href="srvLstUsuarios?action=edit&id=<%=usu.getIdUsuario()%>">Editar</a>
 						</th>
 						<th><a class="btn btn-danger"
-							href="srvUsuario?action=delete&id=<%=usu.getIdUsuario()%>" onclick="Confirm()">Eliminar</a>
+							href="srvLstUsuarios?action=delete&id=<%=usu.getIdUsuario()%>" onclick="Confirm()">Eliminar</a>
 						</th>						
 					</tr>
 					<%
-					}
+					}}
 					%>
 				
 				<tbody>
@@ -92,10 +94,10 @@ h2 {
 							onclick="history.back()">Volver</button>
 					</div>
 					<div class="agregar col-lg-6 col-md-6 col-sm-6 col-xs-12">
-						<form method="GET" action="srvLstUsuarios">
+						
 							<input type="submit" class="btn btn-info" name="action"
 								value="Agregar">
-						</form>
+						
 					</div>
 				</div>
 			</div>

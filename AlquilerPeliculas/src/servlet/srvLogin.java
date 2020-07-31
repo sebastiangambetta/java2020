@@ -77,7 +77,7 @@ public class srvLogin extends HttpServlet {
             if (usuario == null) {
             	request.setAttribute("Error", "Usuario o contraseña incorrecto!.");
             	RequestDispatcher rd = request.getRequestDispatcher("./index.jsp"); 
-                rd.forward(request, response);            	
+                rd.forward(request, response);
            
             } else {
             	response.sendRedirect("srvLstUsuarios");            	

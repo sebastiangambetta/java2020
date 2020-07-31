@@ -141,7 +141,7 @@ CREATE TABLE `socio` (
   `mail` varchar(100) DEFAULT NULL,
   `banco` int(10) DEFAULT NULL,
   `nroTarjeta` int(18) DEFAULT NULL,
-  `estado` varchar(100) DEFAULT NULL,
+  `envioMail` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`nroSocio`),
   KEY `nroTarjeta` (`nroTarjeta`),
   CONSTRAINT `Socio_fk_` FOREIGN KEY (`banco`) REFERENCES `tarjetacredito` (`idTarjeta`) ON UPDATE CASCADE
@@ -193,6 +193,7 @@ CREATE TABLE `usuario` (
   `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) NOT NULL,
   `contrasena` varchar(50) DEFAULT NULL,
+  `estado` varchar(4) DEFAULT 1,
   PRIMARY KEY (`idUsuario`),
   KEY `idUsuario` (`idUsuario`),
   CONSTRAINT `Usuario_fk_` FOREIGN KEY (`idUsuario`) REFERENCES `socio` (`nroSocio`) ON UPDATE CASCADE

@@ -36,7 +36,7 @@ public class UsuarioDAO extends Conexion {
 			conn.setAutoCommit(false);
 
 			String query = "insert into socio(nombre, apellido, domicilio, telefono, mail, banco, nroTarjeta, estado ) "
-					+ "values(?, ?, ?, ?, ?, ?, ?)";
+					+ "values(?, ?, ?, ?, ?, ?, ?, ?)";
 
 			insertSocio = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -100,8 +100,7 @@ public class UsuarioDAO extends Conexion {
 			if (insertUsuario != null) {
 				insertUsuario.close();
 			}
-			if (conn != null) {
-				conn.setAutoCommit(true);
+			if (conn != null) {				
 				conn.close();
 			}			
 		}
@@ -111,7 +110,8 @@ public class UsuarioDAO extends Conexion {
 	public int deleteUsuario(int idUsuario) throws ClassNotFoundException, SQLException {
 
 		conn = this.getConnection();
-		PreparedStatement stmt = conn.prepareStatement("delete from usuario where idUsuario = ? ");
+		//PreparedStatement stmt = conn.prepareStatement("delete from usuario where idUsuario = ? ");
+		PreparedStatement stmt = conn.prepareStatement("update usuario set estado = 3 where idUsuario = ? ");
 		stmt.setInt(1, Integer.valueOf(idUsuario));
 		int rta = stmt.executeUpdate();
 
@@ -137,7 +137,7 @@ public class UsuarioDAO extends Conexion {
     		conn.setAutoCommit(false);
     		
     		stmt = conn.prepareStatement(
-    				"update usuario set email = ?, contrasena = ?, nivelAcceso = ?" + " where idUsuario = ?");
+    				"update usuario set email = ?, estado = 3, contrasena = ?, nivelAcceso = ?" + " where idUsuario = ?");
     		stmt.setString(1, user.getEmail());
     		stmt.setString(2, user.getContrasena());
     		stmt.setString(3, user.getAcceso());
@@ -189,7 +189,7 @@ public class UsuarioDAO extends Conexion {
 	public Usuario Login(String email, String contrasena) throws ClassNotFoundException, SQLException {
 		Usuario user = new Usuario();
 		conn = this.getConnection();
-		PreparedStatement stmt = conn.prepareStatement("select * from usuario where email = ? and contrasena=?");
+		PreparedStatement stmt = conn.prepareStatement("select idUsuario, email, contrasena, nivelAcceso, estado from usuario where email = ? and contrasena=?");
 		stmt.setString(1, email);
 		stmt.setString(2, contrasena);
 		ResultSet rs = stmt.executeQuery();
@@ -200,6 +200,8 @@ public class UsuarioDAO extends Conexion {
 				user.setIdUsuario(rs.getInt("idUsuario"));
 				user.setEmail(rs.getString("email"));
 				user.setContrasena(rs.getString("contrasena"));
+				user.setAcceso(rs.getString("nivelAcceso"));
+				user.setEstado(rs.getString("estado"));
 			} while (rs.next());
 		}
 
@@ -212,7 +214,7 @@ public class UsuarioDAO extends Conexion {
 	public Usuario getUsuario(int id) throws ClassNotFoundException, SQLException {
 		Usuario user = new Usuario();
 		conn = this.getConnection();
-		PreparedStatement stmt = conn.prepareStatement("select * from usuario where idUsuario = ?");
+		PreparedStatement stmt = conn.prepareStatement("select idUsuario, email, contrasena, nivelAcceso, estado from usuario where idUsuario = ? and estado <> '3'");
 		stmt.setInt(1, id);
 		ResultSet rs = stmt.executeQuery();
 		if (!rs.next()) {
@@ -222,6 +224,8 @@ public class UsuarioDAO extends Conexion {
 				user.setIdUsuario(rs.getInt("idUsuario"));
 				user.setEmail(rs.getString("email"));
 				user.setContrasena(rs.getString("contrasena"));
+				user.setAcceso(rs.getString("nivelAcceso"));
+				user.setEstado(rs.getString("estado"));
 			} while (rs.next());
 		}
 
@@ -235,7 +239,7 @@ public class UsuarioDAO extends Conexion {
 		ArrayList<Usuario> lstUsuarios = new ArrayList<Usuario>();
 
 		conn = this.getConnection();
-		PreparedStatement stmt = conn.prepareStatement("select idUsuario, email, contrasena, nivelAcceso from usuario where nivelAcceso <> 'admin' ");
+		PreparedStatement stmt = conn.prepareStatement("select idUsuario, email, contrasena, nivelAcceso, estado from usuario where nivelAcceso <> 'admin' ");
 		ResultSet rs = stmt.executeQuery();
 		while (rs.next()) {
 			Usuario user = new Usuario();
@@ -244,6 +248,7 @@ public class UsuarioDAO extends Conexion {
 			user.setEmail(rs.getString("email"));
 			user.setContrasena(rs.getString("contrasena"));
 			user.setAcceso(rs.getString("nivelAcceso"));
+			user.setEstado(rs.getString("estado"));
 
 			lstUsuarios.add(user);
 		}
