@@ -35,8 +35,7 @@ public class UsuarioUI {
     }
     
     public Usuario getUserbyId(int id) throws ClassNotFoundException, SQLException{
-        Usuario user = new Usuario();
-        user = usuarioDAO.getUsuario(id);
+        Usuario user = usuarioDAO.getUsuario(id);
         if (user == null) {
             return null;
         }

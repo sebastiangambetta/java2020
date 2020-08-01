@@ -71,30 +71,44 @@ public class SocioDAO extends Conexion {
 		return rta;
 	}
 
-	public Socio getSocio(int codPelicula) throws ClassNotFoundException, SQLException {
+	public Socio getSocio(int codPelicula) throws Exception {
+
 		Socio s = new Socio();
-		conn = this.getConnection();
-		PreparedStatement stmt = conn.prepareStatement("select * from socio where nroSocio = ?");
-		stmt.setInt(1, codPelicula);
-		ResultSet rs = stmt.executeQuery();
-		if (!rs.next()) {
-			return null;
-		} else {
-			do {
-				s.setNroSocio(rs.getInt("nroSocio"));
-				s.setNombre(rs.getString("nombre"));
-				s.setApellido(rs.getString("apellido"));
-				s.setDomicilio(rs.getString("domicilio"));
-				s.setTelefono(rs.getString("telefono"));
-				s.setMail(rs.getString("mail"));
-				s.setNroTarjeta(rs.getInt("nroTarjeta"));
-				s.setEstado(rs.getString("envioMail"));
-				s.setBanco(rs.getInt("banco"));
-			} while (rs.next());
+		PreparedStatement stmt = null;
+		try {
+
+			conn = this.getConnection();
+			stmt = conn.prepareStatement("select nroSocio, nombre, apellido, domicilio, telefono, mail, nroTarjeta, envioMail, banco from socio where nroSocio = ?");
+			stmt.setInt(1, codPelicula);
+			ResultSet rs = stmt.executeQuery();
+			if (!rs.next()) {
+				return null;
+			} else {
+				do {
+					s.setNroSocio(rs.getInt("nroSocio"));
+					s.setNombre(rs.getString("nombre"));
+					s.setApellido(rs.getString("apellido"));
+					s.setDomicilio(rs.getString("domicilio"));
+					s.setTelefono(rs.getString("telefono"));
+					s.setMail(rs.getString("mail"));
+					s.setNroTarjeta(rs.getInt("nroTarjeta"));
+					s.setEstado(rs.getString("envioMail"));
+					s.setBanco(rs.getInt("banco"));
+				} while (rs.next());
+			}
+		} catch (SQLException e) {
+			// ver si envio el msj de excepcion
+			throw new SQLException(e.getMessage());
+			//return null;
+		} finally {
+			if (!stmt.isClosed()) {
+				stmt.close();
+			}
+			if (!conn.isClosed()) {
+				conn.close();
+			}
 		}
 
-		rs.close();
-		conn.close();
 		return s;
 	}
 

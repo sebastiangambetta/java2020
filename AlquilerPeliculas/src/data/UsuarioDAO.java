@@ -137,7 +137,7 @@ public class UsuarioDAO extends Conexion {
     		conn.setAutoCommit(false);
     		
     		stmt = conn.prepareStatement(
-    				"update usuario set email = ?, estado = 3, contrasena = ?, nivelAcceso = ?" + " where idUsuario = ?");
+    				"update usuario set email = ?, estado = 2, contrasena = ?, nivelAcceso = ?" + " where idUsuario = ?");
     		stmt.setString(1, user.getEmail());
     		stmt.setString(2, user.getContrasena());
     		stmt.setString(3, user.getAcceso());
@@ -145,7 +145,7 @@ public class UsuarioDAO extends Conexion {
     		rta = stmt.executeUpdate();
 
     		st = conn.prepareStatement("update socio set nombre = ?, apellido = ?, domicilio = ?, telefono = ?, mail = ?, banco = ?, "
-    				+ "nroTarjeta = ? , estado = ? where nroSocio = ?");
+    				+ "nroTarjeta = ? , envioMail = ? where nroSocio = ?");
 
             st.setString(1, s.getNombre());
             st.setString(2, s.getApellido());

@@ -22,11 +22,10 @@ public class SocioUI {
         socioDAO.addSocio(user);        
     }
     
-     public Socio getSocio(int id) throws ClassNotFoundException, SQLException {
-        Socio socio = new Socio();
-        socio = socioDAO.getSocio(id);
+     public Socio getSocio(int id) throws Exception {
+        Socio socio  = socioDAO.getSocio(id);
         if (socio == null) {
-            return null;
+            throw new Exception("No existe el usuario");
         }
 
         return socio;
