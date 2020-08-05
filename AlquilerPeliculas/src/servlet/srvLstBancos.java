@@ -17,7 +17,7 @@ import entities.Banco;
 /**
  * Servlet implementation class srvLstBancos
  */
-@WebServlet("/srvLstBancos")
+@WebServlet(name = "srvLstBancos", urlPatterns = { "/srvLstBancos" })
 public class srvLstBancos extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
