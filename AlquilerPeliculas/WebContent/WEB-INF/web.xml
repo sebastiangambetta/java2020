@@ -39,8 +39,8 @@
         <servlet-class>servlet.srvSocio</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>srvTarjetaCredito</servlet-name>
-        <servlet-class>servlet.srvTarjetaCredito</servlet-class>
+        <servlet-name>srvBanco</servlet-name>
+        <servlet-class>servlet.srvBanco</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>srvUsuario</servlet-name>
@@ -81,8 +81,8 @@
     </servlet-mapping>
     
     <servlet-mapping>
-        <servlet-name>srvTarjetaCredito</servlet-name>
-        <url-pattern>/srvTarjetaCredito</url-pattern>
+        <servlet-name>srvLstBancos</servlet-name>
+        <url-pattern>/srvLstBancos</url-pattern>
     </servlet-mapping>
     
     <servlet-mapping>

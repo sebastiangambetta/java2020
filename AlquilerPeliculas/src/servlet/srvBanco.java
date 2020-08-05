@@ -5,14 +5,14 @@
  */
 package servlet;
 
-import business.SocioUI;
-import entities.Socio;
+import business.BancoUI;
+import entities.Banco;
 import java.io.IOException;
 //import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,17 +24,17 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author giuli
  */
-@WebServlet(name = "srvSocio", urlPatterns = { "/srvSocio" })
-public class srvSocio extends HttpServlet {
+@WebServlet(name = "srvBanco", urlPatterns = { "/srvBanco" })
+public class srvBanco extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static String INSERT_OR_EDIT = "./vista/usuario/Socio.jsp";
-	private static String LIST_SOCIO = "./vista/usuario/lstSocio.jsp";
+	private static String INSERT_OR_EDIT = "./vista/tarjeta/Banco.jsp";
+	private static String LIST = "./vista/tarjeta/lstBancos.jsp";
 
-	SocioUI socioUI = new SocioUI();
+	BancoUI BancoUi = new BancoUI();
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,18 +48,7 @@ public class srvSocio extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-//		try (PrintWriter out = response.getWriter()) {
-//			/* TODO output your page here. You may use following sample code. */
-//			out.println("<!DOCTYPE html>");
-//			out.println("<html>");
-//			out.println("<head>");
-//			out.println("<title>Servlet srvSocio</title>");
-//			out.println("</head>");
-//			out.println("<body>");
-//			out.println("<h1>Servlet srvSocio at " + request.getContextPath() + "</h1>");
-//			out.println("</body>");
-//			out.println("</html>");
-//		}
+		
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
@@ -75,52 +64,53 @@ public class srvSocio extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// processRequest(request, response);
 
 		String forward = "";
-		String action = "lstUser";
+		String action = "lstTarjetas";
 		if (request.getParameter("action") != null)
 			action = request.getParameter("action");
 
-		if (action.equalsIgnoreCase("delete")) {
-			
-			int socioId = Integer.parseInt(request.getParameter("socioId"));
+		if (action.equalsIgnoreCase("edit")) {
+
 			try {
-				if(socioUI.deleteSocio(socioId)) {
-					forward = LIST_SOCIO;
-					request.setAttribute("socios", socioUI.getSocio());
+				
+				Banco banc = new Banco();
+				banc.setIdBanco((Integer.parseInt(request.getParameter("id"))));
+				banc.setNombreBanco(request.getParameter("nombre"));
+				forward = INSERT_OR_EDIT;			
+				
+				if(banc.getIdBanco() != 0) {
+					if(BancoUi.updateBanco(banc)) {
+						RequestDispatcher view = request.getRequestDispatcher(LIST);
+						view.forward(request, response);
+						
+					} else {
+						RequestDispatcher view = request.getRequestDispatcher(LIST);
+						view.forward(request, response);
+						
+					}
+					request.setAttribute("banco", banc);
 					
-				}				
-				
-			} catch (SQLException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
-				
-			} catch (ClassNotFoundException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
-				
-			}
+				} else {
+					if(BancoUi.addBanco(banc)) {
+						RequestDispatcher view = request.getRequestDispatcher(LIST);
+						view.forward(request, response);
+						
+					} else {
+						RequestDispatcher view = request.getRequestDispatcher(LIST);
+						view.forward(request, response);
+						
+					}					
+				}
 
-		} else if (action.equalsIgnoreCase("edit")) {
-
-			forward = INSERT_OR_EDIT;
-			int userId = Integer.parseInt(request.getParameter("userId"));
-			Socio socio;
-			try {
-				socio = socioUI.getSocio(userId);
-				request.setAttribute("socio", socio);
-				
 			} catch (ClassNotFoundException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
-				
+				RequestDispatcher view = request.getRequestDispatcher(LIST);
+				view.forward(request, response);
+
 			} catch (SQLException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
-				
-			}
-			
-			catch (Exception e) {
-				request.setAttribute("Error", "Error al obtener los datos del socio.");
-				RequestDispatcher rd = request.getRequestDispatcher("./lstUsuarios.jsp");
-				rd.forward(request, response);
+				forward = INSERT_OR_EDIT;
+				RequestDispatcher view = request.getRequestDispatcher(LIST);
+				view.forward(request, response);
 				
 			}
 
@@ -128,32 +118,33 @@ public class srvSocio extends HttpServlet {
 			RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
 			view.forward(request, response);
 
-		} else if (action.equalsIgnoreCase("lstUser")) {
+		} else if (action.equalsIgnoreCase("lstTarjetas")) {
 
-			ArrayList<Socio> lstSocios = new ArrayList<Socio>();
+			ArrayList<Banco> bancos = new ArrayList<Banco>();
 			try {
-				lstSocios = socioUI.getSocio();
+				bancos = BancoUi.getBancos();
 				
 			} catch (SQLException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
-				
+
+				RequestDispatcher view = request.getRequestDispatcher(forward);
+				view.forward(request, response);
+
 			} catch (ClassNotFoundException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
+				RequestDispatcher view = request.getRequestDispatcher(forward);
+				view.forward(request, response);
 				
 			}
-
-			forward = LIST_SOCIO;
-			request.setAttribute("lstUsuarios", lstSocios);
+			forward = LIST;
+			request.setAttribute("bancos", bancos);
 
 		} else {
-			Socio socio = new Socio();
-			request.setAttribute("socio", socio);
+			Banco banco = new Banco();
+			request.setAttribute("banco", banco);
 			forward = INSERT_OR_EDIT;
+			
 		}
-
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
-
 	}
 
 	/**

@@ -6,7 +6,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +24,12 @@ import javax.servlet.RequestDispatcher;
  */
 @WebServlet(name = "srvLogin", urlPatterns = {"/srvLogin"})
 public class srvLogin extends HttpServlet {
-
-    UsuarioUI usuarioUI = new UsuarioUI();
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	UsuarioUI usuarioUI = new UsuarioUI();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,9 +70,7 @@ public class srvLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);              
-        response.setContentType("text/html");  
-    PrintWriter out = response.getWriter(); 
+    
           String pass = request.getParameter("contrasena");
         String email = request.getParameter("email");        
                 
@@ -84,7 +86,6 @@ public class srvLogin extends HttpServlet {
             }
 
         } catch (ClassNotFoundException | SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             response.sendRedirect("./jsp/Error.jsp");
         }

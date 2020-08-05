@@ -8,8 +8,8 @@ package servlet;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import business.SocioUI;
-import business.TarjetaCreditoUI;
+import business.BancoUI;
 import business.UsuarioUI;
 import entities.Socio;
-import entities.TarjetaCredito;
+import entities.Banco;
 import entities.Usuario;
 import javax.servlet.RequestDispatcher;
 
@@ -30,12 +30,16 @@ import javax.servlet.RequestDispatcher;
 @WebServlet(name = "srvLstUsuarios", urlPatterns = { "/srvLstUsuarios" })
 public class srvLstUsuarios extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static String INSERT_OR_EDIT = "./vista/usuario/Usuario.jsp";
 	private static String LIST_USER = "./vista/usuario/lstUsuarios.jsp";
 
 	UsuarioUI usuarioUI = new UsuarioUI();
 	SocioUI socioUI = new SocioUI();
-	TarjetaCreditoUI tarjetaCreditoUI = new TarjetaCreditoUI();
+	BancoUI bancoUI = new BancoUI();
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -54,13 +58,14 @@ public class srvLstUsuarios extends HttpServlet {
 			}
 
 			if (action.equalsIgnoreCase("delete")) {
-
-				boolean exito = false;
+				
 				int userId = Integer.parseInt(request.getParameter("id"));
 				try {
-					exito = usuarioUI.deleteUsuario(userId);
-					forward = LIST_USER;
-					request.setAttribute("lstUsuarios", usuarioUI.getUsuarios());
+					if(usuarioUI.deleteUsuario(userId)) {
+						forward = LIST_USER;
+						request.setAttribute("lstUsuarios", usuarioUI.getUsuarios());
+					}
+					
 
 				} catch (SQLException ex) {
 					request.setAttribute("Error", "Error al eliminar el usuario.");
@@ -74,9 +79,9 @@ public class srvLstUsuarios extends HttpServlet {
 				forward = INSERT_OR_EDIT;
 				Usuario user = new Usuario();
 				Socio socio = new Socio();
-				ArrayList<TarjetaCredito> tarjetas;
+				ArrayList<Banco> tarjetas;
 				try {
-					tarjetas = tarjetaCreditoUI.getTarjetaC();
+					tarjetas = bancoUI.getBancos();
 
 					if (request.getParameter("id") != null) {
 						Integer id = Integer.parseInt(request.getParameter("id"));
@@ -115,7 +120,7 @@ public class srvLstUsuarios extends HttpServlet {
 				Usuario user = new Usuario();
 				Socio socio = new Socio();
 				try {
-					ArrayList<TarjetaCredito> tarjetas = tarjetaCreditoUI.getTarjetaC();
+					ArrayList<Banco> tarjetas = bancoUI.getBancos();
 
 					request.setAttribute("usuario", user);
 					request.setAttribute("socio", socio);

@@ -28,7 +28,11 @@ import javax.servlet.http.HttpServletResponse;
 public class srvLineaAlquiler extends HttpServlet {
 
 
-    private static String INSERT_OR_EDIT = "./vista/alquiler/Alquiler.jsp";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static String INSERT_OR_EDIT = "./vista/alquiler/Alquiler.jsp";
     private static String LIST_ALQUILER = "./vista/alquiler/lstAlquiler.jsp";
 
     AlquilerUI alquilerUI = new AlquilerUI();
@@ -79,16 +83,25 @@ public class srvLineaAlquiler extends HttpServlet {
         
                 if (action.equalsIgnoreCase("delete")) {
         
-                    boolean exito = false;
                     int id = Integer.parseInt(request.getParameter("Id"));
                     try {
-                        exito = alquilerUI.deleteAlquiler(id);
-                        forward = LIST_ALQUILER;
-                        request.setAttribute("alquileres", alquilerUI.getAlquiler());
+                    	boolean exito = alquilerUI.deleteAlquiler(id);
+                        if(exito) {
+                        	forward = LIST_ALQUILER;
+                            request.setAttribute("alquileres", alquilerUI.getAlquiler());
+                            
+                        } else {
+                        	forward = LIST_ALQUILER;
+                            request.setAttribute("alquileres", alquilerUI.getAlquiler());
+                        	
+                        }
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger(srvLineaAlquiler.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(srvLineaAlquiler.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
         
                 } else if (action.equalsIgnoreCase("edit")) {
@@ -99,12 +112,13 @@ public class srvLineaAlquiler extends HttpServlet {
                     try {
                         alquiler = alquilerUI.getAlquiler(id);
                         request.setAttribute("alquiler", alquiler);
+                        
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(srvLineaAlquiler.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger(srvLineaAlquiler.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    //request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
                     
                     forward = INSERT_OR_EDIT;
                     RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);

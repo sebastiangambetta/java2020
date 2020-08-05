@@ -8,7 +8,7 @@ package servlet;
 import business.GeneroUI;
 import entities.Genero;
 import java.io.IOException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,7 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "srvGenero", urlPatterns = {"/srvGenero"})
 public class srvGenero extends HttpServlet {
 
-    private static String INSERT_OR_EDIT = "./vista/genero/genero.jsp";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static String INSERT_OR_EDIT = "./vista/genero/genero.jsp";
     private static String LIST_GENERO = "./vista/genero/lstGenero.jsp";
 
     GeneroUI generoUI = new GeneroUI();
@@ -42,19 +46,7 @@ public class srvGenero extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet srvGenero</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet srvGenero at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        response.setContentType("text/html;charset=UTF-8");      
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -76,14 +68,15 @@ public class srvGenero extends HttpServlet {
                 if(request.getParameter("action") != null)
                     action = request.getParameter("action");
         
-                if (action.equalsIgnoreCase("delete")) {
-        
-                    boolean exito = false;
+                if (action.equalsIgnoreCase("delete")) {        
+                    
                     int id = Integer.parseInt(request.getParameter("Id"));
                     try {
-                        exito = generoUI.deleteGenero(id);
-                        forward = LIST_GENERO;
-                        request.setAttribute("generos", generoUI.getGenero());
+                        if(generoUI.deleteGenero(id)) {
+                        	forward = LIST_GENERO;
+                            request.setAttribute("generos", generoUI.getGenero());
+                        }
+                        
                     } catch (SQLException ex) {
                         Logger.getLogger(srvGenero.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {

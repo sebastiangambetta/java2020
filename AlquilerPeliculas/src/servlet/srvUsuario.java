@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.Socio;
-import entities.TarjetaCredito;
+import entities.Banco;
 import entities.Usuario;
 import business.SocioUI;
-import business.TarjetaCreditoUI;
+import business.BancoUI;
 import business.UsuarioUI;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,12 +31,16 @@ import javax.servlet.RequestDispatcher;
 @WebServlet(name = "srvUsuario", urlPatterns = { "/srvUsuario" })
 public class srvUsuario extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static String INSERT_OR_EDIT = "./vista/usuario/Usuario.jsp";
 	private static String LIST_USER = "./vista/usuario/lstUsuarios.jsp";
 
 	UsuarioUI usuarioUI = new UsuarioUI();
 	SocioUI socioUI = new SocioUI();
-	TarjetaCreditoUI tarjetaCreditoUI = new TarjetaCreditoUI();
+	BancoUI bancoUI = new BancoUI();
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,7 +74,7 @@ public class srvUsuario extends HttpServlet {
 		String action = "lstUser";
 		Socio socio;
 		Usuario usuario;
-		ArrayList<TarjetaCredito> tarjetas;
+		ArrayList<Banco> tarjetas;
 
 		if (request.getParameter("action") != null)
 			action = request.getParameter("action");
@@ -83,7 +87,7 @@ public class srvUsuario extends HttpServlet {
 			try {
 				usuario = usuarioUI.getUserbyId(id);
 				socio = socioUI.getSocio(usuario.getIdUsuario());
-				tarjetas = tarjetaCreditoUI.getTarjetaC();
+				tarjetas = bancoUI.getBancos();
 				request.setAttribute("socio", socio);
 				request.setAttribute("usuario", usuario);
 				request.setAttribute("tarjetas", tarjetas);
@@ -124,7 +128,7 @@ public class srvUsuario extends HttpServlet {
 		} else {
 			usuario = new Usuario();
 			socio = new Socio();
-			tarjetas = new ArrayList<TarjetaCredito>();
+			tarjetas = new ArrayList<Banco>();
 			request.setAttribute("usuario", usuario);
 			request.setAttribute("socios", socio);
 			request.setAttribute("tarjetas", tarjetas);

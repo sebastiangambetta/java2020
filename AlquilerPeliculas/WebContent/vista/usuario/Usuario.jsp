@@ -3,7 +3,6 @@
     Created on : 10/02/2020, 19:38:11
     Author     : giuli
 --%>
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@page import="java.util.ArrayList"%>
@@ -11,7 +10,7 @@
 
 <%@page import="entities.Usuario"%>
 <%@page import="entities.Socio"%>
-<%@page import="entities.TarjetaCredito"%>
+<%@page import="entities.Banco"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,18 +46,17 @@
 
 	<%
 		Usuario user = (Usuario) request.getAttribute("usuario");
-	Socio socio = (Socio) request.getAttribute("socio");
-	ArrayList<TarjetaCredito> tarjetas = (ArrayList<TarjetaCredito>) request.getAttribute("tarjetas");
-	
+		Socio socio = (Socio) request.getAttribute("socio");
+		ArrayList<Banco> bancos = (ArrayList<Banco>) request.getAttribute("bancos");
 	%>
 
 	<form method="post" action="srvUsuario">
 		<div class="container card card-body">		
 			
 			<%
-			String error = (String) request.getAttribute("Error");
-			if (error != null) {
-			%>
+									String error = (String) request.getAttribute("Error");
+									if (error != null) {
+								%>
 			
 			<div class="alert alert-warning">
 				<%=error%>
@@ -108,14 +106,13 @@
 					<label for="Banco">Banco</label> <select class="form-control"
 						name="banco">
 
-						<%					
-						
-						for(TarjetaCredito tarj: tarjetas){
-							socio.setBanco(socio.getBanco() == null ? 1 : socio.getBanco());
-								%>
+						<%
+							for(Banco bank: bancos){
+											socio.setBanco(socio.getBanco() == null ? 1 : socio.getBanco());
+						%>
 								
-								<option value="<%= tarj.getiIdTarjeta() %>" <%= tarj.getiIdTarjeta() == socio.getBanco() ? "selected" : "" %> >
-								<%= tarj.getNombreTarjeta() %>
+								<option value="<%= bank.getIdBanco() %>" <%= bank.getIdBanco() == socio.getBanco() ? "selected" : "" %> >
+								<%= bank.getNombreBanco() %>
 								</option>
 
 						<% } %>

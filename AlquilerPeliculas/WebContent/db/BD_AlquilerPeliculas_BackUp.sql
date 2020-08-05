@@ -144,7 +144,7 @@ CREATE TABLE `socio` (
   `envioMail` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`nroSocio`),
   KEY `nroTarjeta` (`nroTarjeta`),
-  CONSTRAINT `Socio_fk_` FOREIGN KEY (`banco`) REFERENCES `tarjetacredito` (`idTarjeta`) ON UPDATE CASCADE
+  CONSTRAINT `Socio_fk_` FOREIGN KEY (`banco`) REFERENCES `banco` (`idBanco`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -162,24 +162,24 @@ UNLOCK TABLES;
 -- Table structure for table `tarjetacredito`
 --
 
-DROP TABLE IF EXISTS `tarjetacredito`;
+DROP TABLE IF EXISTS `banco`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tarjetacredito` (
-  `idTarjeta` int(18) NOT NULL AUTO_INCREMENT,
-  `nombreTarjeta` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`idTarjeta`)
+CREATE TABLE `banco` (
+  `idBanco` int(18) NOT NULL AUTO_INCREMENT,
+  `nombreBanco` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`idBanco`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tarjetacredito`
+-- Dumping data for table `banco`
 --
 
-LOCK TABLES `tarjetacredito` WRITE;
-/*!40000 ALTER TABLE `tarjetacredito` DISABLE KEYS */;
-INSERT INTO `tarjetacredito` VALUES (1,'x');
-/*!40000 ALTER TABLE `tarjetacredito` ENABLE KEYS */;
+LOCK TABLES `banco` WRITE;
+/*!40000 ALTER TABLE `banco` DISABLE KEYS */;
+INSERT INTO `banco` VALUES (1,'x');
+/*!40000 ALTER TABLE `banco` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
