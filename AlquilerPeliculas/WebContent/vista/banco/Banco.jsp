@@ -41,7 +41,7 @@
 <body>
 
 	<%
-		Banco tarj = (Banco) request.getAttribute("tarjeta");
+		Banco bank = (Banco) request.getAttribute("tarjeta");
 		//Socio socio = (Socio) request.getAttribute("socio");
 		//ArrayList<TarjetaCredito> tarjetas = (ArrayList<TarjetaCredito>) request.getAttribute("tarjetas");
 	%>
@@ -66,16 +66,16 @@
 			<div class="usu row">
 				<div class="col-md-3">
 					<input type="hidden" class="form-control" name="id"
-						value="<%=tarj.getiIdTarjeta()%>">
+						value="<%=bank.getIdBanco()%>">
 				</div>
 			</div>
 			<div class="usu row">
 				<div class="col-md-3">
 					<label for="nombre">Nombre</label> <input type="text"
 						class="form-control" name="nombre"
-						value="<%=tarj.getNombreTarjeta() != null ? tarj.getNombreTarjeta() : ""%>"
+						value="<%=bank.getNombreBanco() != null ? bank.getNombreBanco() : ""%>"
 						placeholder="Nombre" required>
-				</div>				
+				</div>
 			</div>
 
 			<div class="buttons row">

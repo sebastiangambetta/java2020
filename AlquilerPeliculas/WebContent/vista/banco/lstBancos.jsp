@@ -42,7 +42,7 @@ h2 {
 	</script>
 
 	<div class="container card card-body">
-		<form method="Get" action="srvTarjetaCredito">
+		<form method="Get" action="srvBanco">
 			<%
 				String error = (String) request.getAttribute("Error");
 				if (error != null) {
@@ -70,15 +70,16 @@ h2 {
 					ArrayList<Banco> list = (ArrayList<Banco>) request.getAttribute("bancos");
 								if(!list.isEmpty())
 								{ 
-								for (Banco bank : list) {
+								for (Banco bank : list) {																		
+									
 					%>
 					<tr>					
-						<th><%= bank.getIdBanco() %></th>						
+						<th><%= bank.getNombreBanco() %></th>						
 						<th><a class="btn btn-info"
-							href="srvLstUsuarios?action=edit&id=<%= bank.getIdBanco() %>">Editar</a>
+							href="srvLstBancos?action=edit&id=<%= bank.getIdBanco() %>">Editar</a>
 						</th>
 						<th><a class="btn btn-danger"
-							href="srvLstUsuarios?action=delete&id=<%= bank.getIdBanco() %>"
+							href="srvLstBancos?action=delete&id=<%= bank.getIdBanco() %>"
 							onclick="Confirm()">Eliminar</a></th>
 					</tr>
 					<%

@@ -31,8 +31,8 @@ public class srvBanco extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static String INSERT_OR_EDIT = "./vista/tarjeta/Banco.jsp";
-	private static String LIST = "./vista/tarjeta/lstBancos.jsp";
+	private static String INSERT_OR_EDIT = "./vista/banco/Banco.jsp";
+	private static String LIST = "./vista/banco/lstBancos.jsp";
 
 	BancoUI BancoUi = new BancoUI();
 

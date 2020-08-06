@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,8 +22,8 @@ import entities.Banco;
 public class srvLstBancos extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static String INSERT_OR_EDIT = "./vista/tarjeta/Banco.jsp";
-	private static String LIST = "./vista/tarjeta/lstBancos.jsp";
+	private static String INSERT_OR_EDIT = "./vista/banco/Banco.jsp";
+	private static String LIST = "./vista/banco/lstBancos.jsp";
 
 	BancoUI bancoUI = new BancoUI();
 
@@ -66,13 +67,13 @@ public class srvLstBancos extends HttpServlet {
 			}
 
 		} else if (action == "edit") {
-			ArrayList<Banco> bancos = new ArrayList<Banco>();
+			ArrayList<Banco> banco = new ArrayList<Banco>();
 			int id = Integer.parseInt(request.getParameter("id"));
 
 			if (id != 0) {
 				try {
-					bancos = bancoUI.getBancos();
-					request.setAttribute("bancos", bancos);
+					banco = bancoUI.getBancos();
+					request.setAttribute("bancos", banco);
 					RequestDispatcher view = request.getRequestDispatcher(LIST);
 					view.forward(request, response);
 
@@ -83,7 +84,7 @@ public class srvLstBancos extends HttpServlet {
 					
 				}
 			} else {
-				request.setAttribute("bancos", bancos);
+				request.setAttribute("banco", banco);
 				RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
 				view.forward(request, response);
 
@@ -91,6 +92,22 @@ public class srvLstBancos extends HttpServlet {
 
 		} else {
 			ArrayList<Banco> bancos = new ArrayList<Banco>();
+			try {
+				bancos = bancoUI.getBancos();
+				
+			} catch (ClassNotFoundException e) {
+				request.setAttribute("bancos", bancos);
+				RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
+				view.forward(request, response);
+				
+			} catch (SQLException e) {
+				request.setAttribute("bancos", bancos);
+				RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
+				view.forward(request, response);
+				
+			}		
+			
+			bancos = bancos.stream().filter(x -> !(x.getNombreBanco().isEmpty())).collect(Collectors.toCollection(() ->  new ArrayList<Banco>()));
 			request.setAttribute("bancos", bancos);
 			RequestDispatcher view = request.getRequestDispatcher(LIST);
 			view.forward(request, response);
