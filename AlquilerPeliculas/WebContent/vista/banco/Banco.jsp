@@ -11,6 +11,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="css/bootstrap.min.css">
 <title>Tarjetas</title>
 <style>
 .title {
@@ -41,12 +42,12 @@
 <body>
 
 	<%
-		Banco bank = (Banco) request.getAttribute("tarjeta");
+		Banco bank = (Banco) request.getAttribute("banco");
 		//Socio socio = (Socio) request.getAttribute("socio");
 		//ArrayList<TarjetaCredito> tarjetas = (ArrayList<TarjetaCredito>) request.getAttribute("tarjetas");
 	%>
 
-	<form method="post" action="srvUsuario">
+	<form method="post" action="srvBanco">
 		<div class="container card card-body">
 
 			<%
@@ -70,7 +71,7 @@
 				</div>
 			</div>
 			<div class="usu row">
-				<div class="col-md-3">
+				<div class="col-md-6">
 					<label for="nombre">Nombre</label> <input type="text"
 						class="form-control" name="nombre"
 						value="<%=bank.getNombreBanco() != null ? bank.getNombreBanco() : ""%>"

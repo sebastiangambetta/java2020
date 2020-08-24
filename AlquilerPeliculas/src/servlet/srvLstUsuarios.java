@@ -68,6 +68,7 @@ public class srvLstUsuarios extends HttpServlet {
 					
 
 				} catch (SQLException ex) {
+					
 					request.setAttribute("Error", "Error al eliminar el usuario.");
 					RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp");
 					rd.forward(request, response);
@@ -79,9 +80,9 @@ public class srvLstUsuarios extends HttpServlet {
 				forward = INSERT_OR_EDIT;
 				Usuario user = new Usuario();
 				Socio socio = new Socio();
-				ArrayList<Banco> tarjetas;
+				ArrayList<Banco> bancos;
 				try {
-					tarjetas = bancoUI.getBancos();
+					bancos = bancoUI.getBancos();
 
 					if (request.getParameter("id") != null) {
 						Integer id = Integer.parseInt(request.getParameter("id"));
@@ -91,12 +92,12 @@ public class srvLstUsuarios extends HttpServlet {
 
 						request.setAttribute("usuario", user);
 						request.setAttribute("socio", socio);
-						request.setAttribute("tarjetas", tarjetas);
+						request.setAttribute("bancos", bancos);
 
 					} else {						
 						request.setAttribute("usuario", user);
 						request.setAttribute("socio", socio);
-						request.setAttribute("tarjetas", tarjetas);
+						request.setAttribute("bancos", bancos);
 						
 						request.setAttribute("Error", "Error al obtener los datos del socio.");
 						RequestDispatcher rd = request.getRequestDispatcher("./lstUsuarios.jsp");
@@ -120,11 +121,11 @@ public class srvLstUsuarios extends HttpServlet {
 				Usuario user = new Usuario();
 				Socio socio = new Socio();
 				try {
-					ArrayList<Banco> tarjetas = bancoUI.getBancos();
+					ArrayList<Banco> bancos = bancoUI.getBancos();
 
 					request.setAttribute("usuario", user);
 					request.setAttribute("socio", socio);
-					request.setAttribute("tarjetas", tarjetas);
+					request.setAttribute("bancos", bancos);
 
 					forward = INSERT_OR_EDIT;
 					RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);

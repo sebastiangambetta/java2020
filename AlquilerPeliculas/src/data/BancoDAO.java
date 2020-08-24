@@ -22,9 +22,9 @@ public class BancoDAO extends Conexion {
 
     public Boolean addBanco(Banco tc) throws SQLException {
         conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("insert into tarjetacredito values(?, ?)");
+        PreparedStatement stmt = conn.prepareStatement("insert into banco (nombreBanco) values( ? )");
 
-        stmt.setInt(5, tc.getIdBanco());
+//        stmt.setInt(5, tc.getIdBanco());
         stmt.setString(1, tc.getNombreBanco());
 
         int value = stmt.executeUpdate();
@@ -41,11 +41,12 @@ public class BancoDAO extends Conexion {
         conn = this.getConnection();
         PreparedStatement stmt = conn.prepareStatement("delete from banco where idBanco = ? ");
         stmt.setInt(1, idBanco);
+
+        int rta = stmt.executeUpdate();
         
         stmt.close();
         conn.close();
-
-        int rta = stmt.executeUpdate();
+        
         return rta == 0 ? false : true;
     }
 

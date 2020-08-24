@@ -107,7 +107,8 @@
 						name="banco">
 
 						<%
-							for(Banco bank: bancos){
+
+						for(Banco bank: bancos){
 											socio.setBanco(socio.getBanco() == null ? 1 : socio.getBanco());
 						%>
 								
@@ -165,7 +166,7 @@
 			</div>
 			<div class="buttons row">
 				<div class="col-md-6">
-					<button type="button" class="btn btn-info" onclick="history.back()">Volver</button>
+					<button type="button" class="btn btn-info" onclick="history.back()">Volver</button>					
 				</div>
 				<div class="savebtn col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<input class="btn btn-info" type="submit" name="save"
@@ -174,6 +175,16 @@
 			</div>
 		</div>
 	</form>
+	<script type="text/javascript">
+	function redirect(){
+		<% 
+		
+		RequestDispatcher rd = request.getRequestDispatcher("./Error.jsp");
+		rd.forward(request, response);
+		
+		%>
+	}
+	</script>
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 </body>

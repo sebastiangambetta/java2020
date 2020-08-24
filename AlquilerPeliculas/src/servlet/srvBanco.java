@@ -11,6 +11,8 @@ import java.io.IOException;
 //import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -48,7 +50,7 @@ public class srvBanco extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		
+
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
@@ -71,50 +73,57 @@ public class srvBanco extends HttpServlet {
 			action = request.getParameter("action");
 
 		if (action.equalsIgnoreCase("edit")) {
-
+			ArrayList<Banco> lstbancos = new ArrayList<Banco>();
+			Banco banc = new Banco();
 			try {
-				
-				Banco banc = new Banco();
+
 				banc.setIdBanco((Integer.parseInt(request.getParameter("id"))));
 				banc.setNombreBanco(request.getParameter("nombre"));
-				forward = INSERT_OR_EDIT;			
-				
-				if(banc.getIdBanco() != 0) {
-					if(BancoUi.updateBanco(banc)) {
+				forward = INSERT_OR_EDIT;
+
+				if (banc.getIdBanco() != 0) {
+					if (BancoUi.updateBanco(banc)) {						
+						lstbancos = BancoUi.getBancos();
+						lstbancos = lstbancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() -> new ArrayList<Banco>()));
+						request.setAttribute("bancos", lstbancos);
 						RequestDispatcher view = request.getRequestDispatcher(LIST);
 						view.forward(request, response);
-						
+
 					} else {
+						lstbancos = BancoUi.getBancos();
+						lstbancos = lstbancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() -> new ArrayList<Banco>()));
+						request.setAttribute("bancos", lstbancos);
 						RequestDispatcher view = request.getRequestDispatcher(LIST);
 						view.forward(request, response);
-						
+
 					}
-					request.setAttribute("banco", banc);
-					
+
 				} else {
-					if(BancoUi.addBanco(banc)) {
+					if (BancoUi.addBanco(banc)) {
+						request.setAttribute("bancos", lstbancos);
 						RequestDispatcher view = request.getRequestDispatcher(LIST);
 						view.forward(request, response);
-						
+
 					} else {
+						request.setAttribute("bancos", lstbancos);
 						RequestDispatcher view = request.getRequestDispatcher(LIST);
 						view.forward(request, response);
-						
-					}					
+
+					}
 				}
 
 			} catch (ClassNotFoundException ex) {
+				request.setAttribute("bancos", lstbancos);
 				RequestDispatcher view = request.getRequestDispatcher(LIST);
 				view.forward(request, response);
 
 			} catch (SQLException ex) {
-				forward = INSERT_OR_EDIT;
+				request.setAttribute("bancos", lstbancos);
 				RequestDispatcher view = request.getRequestDispatcher(LIST);
 				view.forward(request, response);
-				
+
 			}
 
-			forward = INSERT_OR_EDIT;
 			RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
 			view.forward(request, response);
 
@@ -123,16 +132,18 @@ public class srvBanco extends HttpServlet {
 			ArrayList<Banco> bancos = new ArrayList<Banco>();
 			try {
 				bancos = BancoUi.getBancos();
+				bancos = bancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() -> new ArrayList<Banco>()));
 				
 			} catch (SQLException ex) {
-
+				request.setAttribute("bancos", bancos);
 				RequestDispatcher view = request.getRequestDispatcher(forward);
 				view.forward(request, response);
 
 			} catch (ClassNotFoundException ex) {
+				request.setAttribute("bancos", bancos);
 				RequestDispatcher view = request.getRequestDispatcher(forward);
 				view.forward(request, response);
-				
+
 			}
 			forward = LIST;
 			request.setAttribute("bancos", bancos);
@@ -141,7 +152,7 @@ public class srvBanco extends HttpServlet {
 			Banco banco = new Banco();
 			request.setAttribute("banco", banco);
 			forward = INSERT_OR_EDIT;
-			
+
 		}
 		RequestDispatcher view = request.getRequestDispatcher(forward);
 		view.forward(request, response);
@@ -158,7 +169,45 @@ public class srvBanco extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		processRequest(request, response);
+		Banco bank = new Banco();
+
+		bank.setIdBanco(Integer.parseInt(request.getParameter("id")));
+		bank.setNombreBanco(request.getParameter("nombre"));
+
+		try {
+			if (bank.getIdBanco() != 0) {
+
+				if (BancoUi.updateBanco(bank)) {
+					ArrayList<Banco> bancos = BancoUi.getBancos();
+					bancos = bancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() -> new ArrayList<Banco>()));
+					request.setAttribute("bancos", bancos);
+					RequestDispatcher view = request.getRequestDispatcher(LIST);
+					view.forward(request, response);
+
+				} else {
+					// Completar con jsp de error
+				}
+			} else {
+				if (BancoUi.addBanco(bank)) {
+					ArrayList<Banco> bancos = BancoUi.getBancos();
+					bancos = bancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() -> new ArrayList<Banco>()));
+					request.setAttribute("bancos", bancos);
+					RequestDispatcher view = request.getRequestDispatcher(LIST);
+					view.forward(request, response);
+
+				} else {
+					// Completar con jsp de error
+					
+				}
+			}
+
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

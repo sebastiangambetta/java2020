@@ -47,11 +47,15 @@ public class srvLstBancos extends HttpServlet {
 		if (request.getParameter("action") != null)
 			action = request.getParameter("action");
 
-		if (action == "delete") {
+		if (action.equalsIgnoreCase("delete")) {
+			ArrayList<Banco> bancos = new ArrayList<Banco>();
 			int id = Integer.parseInt(request.getParameter("id"));
 			try {
 				if (bancoUI.deleteBanco(id)) {
 					request.setAttribute("Succes", "Se elimino el banco con exito");
+					bancos = bancoUI.getBancos();
+					bancos = bancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() -> new ArrayList<Banco>()));
+					request.setAttribute("bancos", bancos);
 					RequestDispatcher view = request.getRequestDispatcher(LIST);
 					view.forward(request, response);					
 
@@ -66,15 +70,15 @@ public class srvLstBancos extends HttpServlet {
 				e.printStackTrace();
 			}
 
-		} else if (action == "edit") {
-			ArrayList<Banco> banco = new ArrayList<Banco>();
+		} else if (action.equalsIgnoreCase("edit")) {
+			Banco banco = new Banco();
 			int id = Integer.parseInt(request.getParameter("id"));
 
 			if (id != 0) {
 				try {
-					banco = bancoUI.getBancos();
-					request.setAttribute("bancos", banco);
-					RequestDispatcher view = request.getRequestDispatcher(LIST);
+					banco = bancoUI.getBanco(id);
+					request.setAttribute("banco", banco);
+					RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
 					view.forward(request, response);
 
 				} catch (ClassNotFoundException | SQLException e) {					
@@ -92,8 +96,10 @@ public class srvLstBancos extends HttpServlet {
 
 		} else {
 			ArrayList<Banco> bancos = new ArrayList<Banco>();
+			
 			try {
 				bancos = bancoUI.getBancos();
+				bancos = bancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() -> new ArrayList<Banco>()));
 				
 			} catch (ClassNotFoundException e) {
 				request.setAttribute("bancos", bancos);
@@ -105,12 +111,11 @@ public class srvLstBancos extends HttpServlet {
 				RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
 				view.forward(request, response);
 				
-			}		
-			
-			bancos = bancos.stream().filter(x -> !(x.getNombreBanco().isEmpty())).collect(Collectors.toCollection(() ->  new ArrayList<Banco>()));
+			}			
+			bancos = bancos.stream().filter(x -> x.getIdBanco() != 1).collect(Collectors.toCollection(() ->  new ArrayList<Banco>()));
 			request.setAttribute("bancos", bancos);
 			RequestDispatcher view = request.getRequestDispatcher(LIST);
-			view.forward(request, response);
+			view.forward(request, response);		
 			
 		}
 	}

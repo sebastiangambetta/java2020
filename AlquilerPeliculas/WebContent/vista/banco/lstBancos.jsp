@@ -31,6 +31,10 @@ h2 {
 	text-align: center;
 	margin-bottom: 50px;
 }
+
+thead{
+text-align: center
+}
 </style>
 <title>Bancos</title>
 </head>
@@ -60,21 +64,22 @@ h2 {
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th>Banco</th>						
-						<th>Actualizar</th>
-						<th>Eliminar</th>
+						<th><p>Bancos</p></th>						
+						<!-- <th>Actualizar</th>
+						<th>Eliminar</th> -->
 					</tr>
 				</thead>
 				<tbody>
-					<%
+					<%					
 					ArrayList<Banco> list = (ArrayList<Banco>) request.getAttribute("bancos");
+					
 								if(!list.isEmpty())
 								{ 
 								for (Banco bank : list) {																		
 									
 					%>
 					<tr>					
-						<th><%= bank.getNombreBanco() %></th>						
+						<th><%= bank.getNombreBanco() %></th>
 						<th><a class="btn btn-info"
 							href="srvLstBancos?action=edit&id=<%= bank.getIdBanco() %>">Editar</a>
 						</th>
