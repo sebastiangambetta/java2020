@@ -181,3 +181,15 @@ DEFAULT CHARACTER SET = utf8;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+INSERT INTO `banco` VALUES (1,'x');
+INSERT INTO `banco` VALUES (2,'Macro');
+
+INSERT INTO `socio` VALUES (1,'admin', 'admin', null, '1111','admin@gmail.com', 1, null, 1);
+INSERT INTO `socio` VALUES (2, 'Jacinto','Gonzales','sarmiento 123','123654789123','JGonzalez@gmail.com', 1, null, 1);
+
+INSERT INTO `usuario` VALUES (1,'admin@gmail.com','admin', 1, 'admin');
+INSERT INTO `usuario` VALUES (2,'JGonzalez@gmail.com','JGonzalez123', 2, 'user');
+

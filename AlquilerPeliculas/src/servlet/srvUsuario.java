@@ -37,6 +37,7 @@ public class srvUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String INSERT_OR_EDIT = "./vista/usuario/Usuario.jsp";
 	private static String LIST_USER = "./vista/usuario/lstUsuarios.jsp";
+	private static String ERROR = "Error.jsp";
 
 	UsuarioUI usuarioUI = new UsuarioUI();
 	SocioUI socioUI = new SocioUI();
@@ -54,6 +55,9 @@ public class srvUsuario extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Usuario user = request.getParameter("user");
+
+		System.out.print("Llego");
+
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
@@ -74,70 +78,66 @@ public class srvUsuario extends HttpServlet {
 		String action = "lstUser";
 		Socio socio;
 		Usuario usuario;
-		ArrayList<Banco> tarjetas;
+		ArrayList<Banco> bancos;
+		try {
+			if (request.getParameter("action") != null)
+				action = request.getParameter("action");
 
-		if (request.getParameter("action") != null)
-			action = request.getParameter("action");
+			if (action.equalsIgnoreCase("add")) {
+				bancos = bancoUI.getBancos();
+				request.setAttribute("socio", new Socio());
+				request.setAttribute("usuario", new Usuario());
+				request.setAttribute("bancos", bancos);
 
-		if (action.equalsIgnoreCase("edit")) {
+			} else if (action.equalsIgnoreCase("edit")) {
+				forward = INSERT_OR_EDIT;
+				int id = Integer.parseInt(request.getParameter("id"));
 
-			forward = INSERT_OR_EDIT;
-			int id = Integer.parseInt(request.getParameter("id"));
-
-			try {
 				usuario = usuarioUI.getUserbyId(id);
 				socio = socioUI.getSocio(usuario.getIdUsuario());
-				tarjetas = bancoUI.getBancos();
+				bancos = bancoUI.getBancos();
 				request.setAttribute("socio", socio);
 				request.setAttribute("usuario", usuario);
-				request.setAttribute("tarjetas", tarjetas);
+				request.setAttribute("bancos", bancos);
 
-			} catch (ClassNotFoundException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
+				forward = INSERT_OR_EDIT;
+				RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
+				view.forward(request, response);
 
-			} catch (SQLException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
+			} else if (action.equalsIgnoreCase("lstUser")) {
 
-			} catch (Exception e) {
-				request.setAttribute("Error", "Error al obtener los datos del socio.");
-				RequestDispatcher rd = request.getRequestDispatcher("./lstUsuarios.jsp");
-				rd.forward(request, response);
+				ArrayList<Usuario> lstUsuario = new ArrayList<Usuario>();
 
-			}
-
-			forward = INSERT_OR_EDIT;
-			RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
-			view.forward(request, response);
-
-		} else if (action.equalsIgnoreCase("lstUser")) {
-
-			ArrayList<Usuario> lstUsuario = new ArrayList<Usuario>();
-			try {
 				lstUsuario = usuarioUI.getUsuarios();
 				forward = LIST_USER;
 				request.setAttribute("lstUsuarios", lstUsuario);
 
-			} catch (SQLException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
-
-			} catch (ClassNotFoundException ex) {
-				Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
+			} else {
+				usuario = new Usuario();
+				socio = new Socio();
+				bancos = new ArrayList<Banco>();
+				request.setAttribute("usuario", usuario);
+				request.setAttribute("socios", socio);
+				request.setAttribute("bancos", bancos);
+				forward = INSERT_OR_EDIT;
 
 			}
 
-		} else {
-			usuario = new Usuario();
-			socio = new Socio();
-			tarjetas = new ArrayList<Banco>();
-			request.setAttribute("usuario", usuario);
-			request.setAttribute("socios", socio);
-			request.setAttribute("tarjetas", tarjetas);
-			forward = INSERT_OR_EDIT;
+		} catch (ClassNotFoundException ex) {
+			Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
+			RequestDispatcher rd = request.getRequestDispatcher(ERROR);
+			rd.forward(request, response);
 
+		} catch (SQLException ex) {
+			Logger.getLogger(srvSocio.class.getName()).log(Level.SEVERE, null, ex);
+			RequestDispatcher rd = request.getRequestDispatcher(ERROR);
+			rd.forward(request, response);
+
+		} catch (Exception e) {
+			// request.setAttribute("Error", "Error al obtener los datos del socio.");
+			RequestDispatcher rd = request.getRequestDispatcher(ERROR);
+			rd.forward(request, response);
 		}
-
-		RequestDispatcher view = request.getRequestDispatcher(forward);
-		view.forward(request, response);
 
 	}
 
@@ -199,17 +199,17 @@ public class srvUsuario extends HttpServlet {
 				request.setAttribute("lstUsuarios", lstUsuarios);
 				RequestDispatcher rd = request.getRequestDispatcher(LIST_USER);
 				rd.forward(request, response);
-				
+
 			} catch (ClassNotFoundException ex) {
 				request.setAttribute("Error", "Ocurrio un error al actualizar.");
 				RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp");
 				rd.forward(request, response);
-				
+
 			} catch (SQLException ex) {
 				request.setAttribute("Error", "Ocurrio un error al actualizar.");
 				RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp");
 				rd.forward(request, response);
-				
+
 			}
 
 		request.getRequestDispatcher(LIST_USER).forward(request, response);

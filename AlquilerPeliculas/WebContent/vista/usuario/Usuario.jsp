@@ -43,8 +43,7 @@
 <title>Usuario</title>
 </head>
 <body>
-
-	<%
+<%
 		Usuario user = (Usuario) request.getAttribute("usuario");
 		Socio socio = (Socio) request.getAttribute("socio");
 		ArrayList<Banco> bancos = (ArrayList<Banco>) request.getAttribute("bancos");
@@ -53,7 +52,7 @@
 	<form method="post" action="srvUsuario">
 		<div class="container card card-body">		
 			
-			<%
+			<%-- <%
 									String error = (String) request.getAttribute("Error");
 									if (error != null) {
 								%>
@@ -63,7 +62,7 @@
 			</div>
 			<%
 				}
-			%>
+			%> --%>
 			<div class="title">
 				<h1>Datos del Socio</h1>
 			</div>
@@ -174,17 +173,7 @@
 				</div>
 			</div>
 		</div>
-	</form>
-	<script type="text/javascript">
-	function redirect(){
-		<% 
-		
-		RequestDispatcher rd = request.getRequestDispatcher("./Error.jsp");
-		rd.forward(request, response);
-		
-		%>
-	}
-	</script>
+	</form>	
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 </body>
