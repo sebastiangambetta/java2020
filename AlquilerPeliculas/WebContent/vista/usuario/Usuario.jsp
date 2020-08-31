@@ -4,9 +4,7 @@
     Author     : giuli
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <%@page import="java.util.ArrayList"%>
-
 
 <%@page import="entities.Usuario"%>
 <%@page import="entities.Socio"%>
@@ -39,6 +37,7 @@
 .usu {
 	text-align: center;
 }
+
 </style>
 <title>Usuario</title>
 </head>

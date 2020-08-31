@@ -38,7 +38,7 @@ public class VideoClubDAO extends Conexion {
     public int deleteVideo(int Id) throws ClassNotFoundException, SQLException {
 
         conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("delete from videoclub where Id = ? ");
+        PreparedStatement stmt = conn.prepareStatement("delete from videoclub where id = ? ");
         stmt.setInt(1, Integer.valueOf(Id));
         int rta = stmt.executeUpdate();
         return rta;
@@ -48,7 +48,7 @@ public class VideoClubDAO extends Conexion {
     public int editVideo(VideoClub video) throws ClassNotFoundException, SQLException {
 
         conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("update usuario set importePorDia = ?, plazoMaxDevolver = ?"
+        PreparedStatement stmt = conn.prepareStatement("update videoclub set importePorDia = ?, plazoMaxDevolver = ?"
                 + ", cantMaxPelPendientes = ? where id = ?");
         stmt.setFloat(1, video.getImportePorDia());
         stmt.setInt(2, video.getPlazoMaxADevolver());
@@ -65,17 +65,17 @@ public class VideoClubDAO extends Conexion {
     public VideoClub getVideo(int id) throws ClassNotFoundException, SQLException {
         VideoClub video = new VideoClub();
         conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("select * from usuario where id = ?");
+        PreparedStatement stmt = conn.prepareStatement("select * from videoclub where id = ?");
         stmt.setFloat(1, id);
         ResultSet rs = stmt.executeQuery();
         if (!rs.next()) {
             return null;
         } else {
             do {
-                video.setId(rs.getInt("idUsuario"));
+                video.setId(rs.getInt("id"));
                 video.setImportePorDia(rs.getFloat("importePorDia"));
-                video.setPlazoMaxADevolver(rs.getInt("plazoMaxDevolver"));
-                video.setCantMaxPelPendientes(rs.getInt("contrasena"));
+                video.setCantMaxPelPendientes(rs.getInt("cantMaxPelPendientes"));
+                video.setPlazoMaxADevolver(rs.getInt("plazoMaxADevolver"));
             } while (rs.next());
         }
 
@@ -94,10 +94,10 @@ public class VideoClubDAO extends Conexion {
         while (rs.next()) {
             VideoClub video = new VideoClub();
 
-            video.setId(rs.getInt("idUsuario"));
+            video.setId(rs.getInt("id"));
             video.setImportePorDia(rs.getFloat("importePorDia"));
-            video.setPlazoMaxADevolver(rs.getInt("plazoMaxDevolver"));
-            video.setCantMaxPelPendientes(rs.getInt("contrasena"));
+            video.setPlazoMaxADevolver(rs.getInt("plazoMaxADevolver"));
+            video.setCantMaxPelPendientes(rs.getInt("cantMaxPelPendientes"));
 
             lstVideos.add(video);
         }
