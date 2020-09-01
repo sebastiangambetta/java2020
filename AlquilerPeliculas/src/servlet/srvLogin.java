@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import entities.Usuario;
 import business.UsuarioUI;
@@ -30,6 +31,9 @@ public class srvLogin extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 	UsuarioUI usuarioUI = new UsuarioUI();
+	private String ERROR = "./ERROR.jsp";
+	private String HOME = "./index.jsp";
+	
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -78,16 +82,22 @@ public class srvLogin extends HttpServlet {
             Usuario usuario = usuarioUI.Login(email, pass);
             if (usuario == null) {
             	request.setAttribute("Error", "Usuario o contraseña incorrecto!.");
-            	RequestDispatcher rd = request.getRequestDispatcher("./index.jsp"); 
+            	RequestDispatcher rd = request.getRequestDispatcher(HOME); 
                 rd.forward(request, response);
            
             } else {
-            	response.sendRedirect("srvLstUsuarios");            	
+            	HttpSession session = request.getSession(true);
+            	session.setAttribute("user", usuario);
+            	response.sendRedirect("srvLstUsuarios");
+            	
+            	//Para obtener los datos de session
+            	//HttpSession misession= (HttpSession) request.getSession();
+            	
             }
 
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            response.sendRedirect("./jsp/Error.jsp");
+            response.sendRedirect(this.ERROR);
         }
     }
 

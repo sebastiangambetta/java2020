@@ -52,6 +52,12 @@
         <servlet-class>servlet.srvUsuario</servlet-class>
     </servlet>
     
+    <servlet>
+        <servlet-name>srvVideoClub</servlet-name>
+        <servlet-class>servlet.srvVideoClub</servlet-class>
+    </servlet>
+   
+    
     <servlet-mapping>
         <servlet-name>srvGenero</servlet-name>
         <url-pattern>/srvGenero</url-pattern>
@@ -98,7 +104,13 @@
     <servlet-mapping>
         <servlet-name>srvUsuario</servlet-name>
         <url-pattern>/srvUsuario</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>    
+    
+    <servlet-mapping>
+        <servlet-name>srvVideoClub</servlet-name>
+        <url-pattern>/srvVideoClub</url-pattern>
+    </servlet-mapping>  
+   
     
     <session-config>
         <session-timeout>

@@ -27,6 +27,12 @@ public class VideoClubUI {
 
         return video;
     }
+    
+    public boolean addVideo(VideoClub video) throws SQLException, ClassNotFoundException {
+        int rta = videoDAO.addVideo(video);
+        return rta == 1 ? true : false;
+        
+    }
 
     public ArrayList<VideoClub> getVideos() throws SQLException, ClassNotFoundException {
         ArrayList<VideoClub> lstVideos = new ArrayList<VideoClub>();

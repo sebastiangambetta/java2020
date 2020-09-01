@@ -20,7 +20,7 @@ public class VideoClubDAO extends Conexion {
 
     Connection conn = null;
 
-    public void addVideo(VideoClub video) throws SQLException {
+    public int addVideo(VideoClub video) throws SQLException {
 
         conn = this.getConnection();
         PreparedStatement st = conn.prepareStatement("insert into videoclub values(?, ?, ?)");
@@ -29,10 +29,12 @@ public class VideoClubDAO extends Conexion {
         st.setInt(2, video.getPlazoMaxADevolver());
         st.setInt(3, video.getCantMaxPelPendientes());
 
-        st.executeUpdate();
+        int value = st.executeUpdate();
 
         st.close();
         conn.close();
+        
+        return value;
     }
 
     public int deleteVideo(int Id) throws ClassNotFoundException, SQLException {
@@ -89,7 +91,7 @@ public class VideoClubDAO extends Conexion {
         ArrayList<VideoClub> lstVideos = new ArrayList<VideoClub>();
 
         conn = this.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("select * from usuario");
+        PreparedStatement stmt = conn.prepareStatement("select id, plazoMaxADevolver, cantMaxPelPendientes, importePorDia from videoclub");
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             VideoClub video = new VideoClub();

@@ -378,7 +378,7 @@ body{margin:40px;}
 					<h2>OOOH! Esta perdido?.</h2>
 					<p>La pagina que esta buscando no existe. 
 					Pero puede hacer click en el boton para volver al inicio.</p>
-					<button type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Home"><i class="glyphicon glyphicon-home"></i></button>								
+					<button type="button" class="btn btn-info btn-circle btn-xl" data-toggle="tooltip" data-placement="bottom" title="Home" href="./Error.jsp"><i class="glyphicon glyphicon-home"></i></button>								
 				</div>
 			</div>
 		</div>

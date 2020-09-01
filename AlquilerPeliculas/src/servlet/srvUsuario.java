@@ -162,8 +162,7 @@ public class srvUsuario extends HttpServlet {
 		socio.setDomicilio(request.getParameter("domicilio"));
 		socio.setTelefono(request.getParameter("telefono"));
 		socio.setMail(request.getParameter("uEmail"));
-		socio.setEstado(
-				request.getParameter("estado").toString() != "" ? request.getParameter("estado").toString() : null);
+		socio.setEstado(request.getParameter("estado").toString() != "" ? request.getParameter("estado").toString() : null);
 		socio.setBanco(Integer.parseInt(request.getParameter("banco")));
 
 		usuario.setIdUsuario(Integer.parseInt(request.getParameter("Uid")));
