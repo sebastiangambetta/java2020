@@ -36,6 +36,8 @@ public class srvLstUsuarios extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static String INSERT_OR_EDIT = "./vista/usuario/Usuario.jsp";
 	private static String LIST_USER = "./vista/usuario/lstUsuarios.jsp";
+	private static String INDEX = "./index.jsp";
+	private static String ERROR = "Error.jsp";
 
 	UsuarioUI usuarioUI = new UsuarioUI();
 	SocioUI socioUI = new SocioUI();
@@ -48,36 +50,35 @@ public class srvLstUsuarios extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		String forward = "";
+		
 		String action = "lstUser";
 
 		try {
+
 			if (request.getParameter("action") != null) {
 				action = request.getParameter("action");
 			}
 
 			if (action.equalsIgnoreCase("delete")) {
-				
 				int userId = Integer.parseInt(request.getParameter("id"));
 				try {
-					if(usuarioUI.deleteUsuario(userId)) {
-						forward = LIST_USER;
+
+					if (usuarioUI.deleteUsuario(userId)) {
 						request.setAttribute("lstUsuarios", usuarioUI.getUsuarios());
+
 					}
-					
+
+					RequestDispatcher rd = request.getRequestDispatcher(INSERT_OR_EDIT);
+					rd.forward(request, response);
 
 				} catch (SQLException ex) {
-					
 					request.setAttribute("Error", "Error al eliminar el usuario.");
-					RequestDispatcher rd = request.getRequestDispatcher("lstUsuarios.jsp");
-					rd.forward(request, response);
-					
-				}
+					request.setAttribute("lstUsuarios", usuarioUI.getUsuarios());
+					RequestDispatcher rd = request.getRequestDispatcher(LIST_USER);
+					rd.forward(request, response); 
+					} 
+				} else if (action.equalsIgnoreCase("edit")) {
 
-			} else if (action.equalsIgnoreCase("edit")) {
-
-				forward = INSERT_OR_EDIT;
 				Usuario user = new Usuario();
 				Socio socio = new Socio();
 				ArrayList<Banco> bancos;
@@ -85,39 +86,29 @@ public class srvLstUsuarios extends HttpServlet {
 					bancos = bancoUI.getBancos();
 
 					if (request.getParameter("id") != null) {
-						Integer id = Integer.parseInt(request.getParameter("id"));
+						Integer id = Integer.parseInt(request.getParameter("id"));						
+						
+						request.setAttribute("action", "edit");
+						request.setAttribute("id", id);
 
-						user = usuarioUI.getUserbyId(id);
-						socio = socioUI.getSocio(id);
-
-						request.setAttribute("usuario", user);
-						request.setAttribute("socio", socio);
-						request.setAttribute("bancos", bancos);
+						RequestDispatcher rd = request.getRequestDispatcher("/srvUsuario");
+						rd.forward(request, response);
 
 					} else {						
-						request.setAttribute("usuario", user);
-						request.setAttribute("socio", socio);
-						request.setAttribute("bancos", bancos);
-						
-						request.setAttribute("Error", "Error al obtener los datos del socio.");
-						RequestDispatcher rd = request.getRequestDispatcher("./lstUsuarios.jsp");
+
+						request.setAttribute("action", "add");						
+						RequestDispatcher rd = request.getRequestDispatcher(INSERT_OR_EDIT);
 						rd.forward(request, response);
 					}
 
 				} catch (Exception e) {
-					request.setAttribute("Error", "Error al obtener los datos del socio.");
-					RequestDispatcher rd = request.getRequestDispatcher("./lstUsuarios.jsp");
+					RequestDispatcher rd = request.getRequestDispatcher(ERROR);
 					rd.forward(request, response);
-					
-				}
 
-				forward = INSERT_OR_EDIT;
-				RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
-				view.forward(request, response);
+				}
 			}
 
-			else if (action.equalsIgnoreCase("Agregar")) {
-				forward = INSERT_OR_EDIT;
+			else if (action.equalsIgnoreCase("Agregar")) {			
 				Usuario user = new Usuario();
 				Socio socio = new Socio();
 				try {
@@ -126,35 +117,34 @@ public class srvLstUsuarios extends HttpServlet {
 					request.setAttribute("usuario", user);
 					request.setAttribute("socio", socio);
 					request.setAttribute("bancos", bancos);
-
-					forward = INSERT_OR_EDIT;
+					
 					RequestDispatcher view = request.getRequestDispatcher(INSERT_OR_EDIT);
-					view.forward(request, response);
-				} catch (Exception e) {
-					request.setAttribute("Error", "Ocurrio un error.");
-					RequestDispatcher rd = request.getRequestDispatcher("./lstUsuarios.jsp");
+					view.forward(request, response);					
+					
+				} catch (Exception e) {					
+					RequestDispatcher rd = request.getRequestDispatcher(ERROR);
 					rd.forward(request, response);
 				}
 
-			} else if (action.equalsIgnoreCase("lstUser")) {
-
-				forward = LIST_USER;
-				ArrayList<Usuario> lstUsuarios = usuarioUI.getUsuarios();
-				request.setAttribute("lstUsuarios", lstUsuarios);
+//			} else if (action.equalsIgnoreCase("lstUser")) {
+			} else {
+				request.setAttribute("lstUsuarios", usuarioUI.getUsuarios());
+				RequestDispatcher rd = request.getRequestDispatcher(LIST_USER);
+				rd.forward(request, response);
 
 			}
+
+//			RequestDispatcher view = request.getRequestDispatcher(forward);
+//			view.forward(request, response);
 
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			request.setAttribute("Error", "Hubo un error al recuperar los socios");
-			RequestDispatcher rd = request.getRequestDispatcher("./index.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher(INDEX);
 			rd.forward(request, response);
 
 		}
-
-		RequestDispatcher view = request.getRequestDispatcher(forward);
-		view.forward(request, response);
 
 	}
 

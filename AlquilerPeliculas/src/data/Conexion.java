@@ -23,7 +23,7 @@ public class Conexion {
 		try{
 
 			Class.forName("com.mysql.jdbc.Driver");
-			 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/alquiler_peliculas?serverTimezone=UTC", "root", "sodastereo2662");
+			 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/alquiler_peliculas?serverTimezone=UTC", "root", "soda2662");
 			 //Statement stmt = conn.createStatement();
 			 
 		} catch(ClassNotFoundException e){
