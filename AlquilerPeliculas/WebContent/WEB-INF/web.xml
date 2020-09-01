@@ -102,8 +102,7 @@
         <servlet-name>srvLstBancos</servlet-name>
         <url-pattern>/srvLstBancos</url-pattern>
     </servlet-mapping>
-    
-<<<<<<< HEAD
+
     <servlet-mapping>
         <servlet-name>srvUsuario</servlet-name>
         <url-pattern>/srvUsuario</url-pattern>
@@ -114,9 +113,6 @@
         <url-pattern>/srvVideoClub</url-pattern>
     </servlet-mapping>  
    
-    
-=======
->>>>>>> branch 'Desarrollo' of https://github.com/sebastiangambetta/java2020.git
     <session-config>
         <session-timeout>
             30
